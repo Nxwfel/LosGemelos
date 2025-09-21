@@ -4,6 +4,12 @@ import { filter } from 'framer-motion/client'
 import Burger from '../assets/imgs/burger.svg'
 import Bucket from '../assets/imgs/chicken.png'
 import Pizza from '../assets/imgs/pizzas.jpg'
+import Sandwich from '../assets/imgs/sandwiches.jpg'
+import Broast from '../assets/imgs/broast.jpeg'
+import Tacos from '../assets/imgs/Tacos.png'
+import Plates from '../assets/imgs/Plates.jpg'
+import Salade from '../assets/imgs/salad.png'
+import Salades from '../assets/imgs/salades.jpeg'
 const Order = () => {
   return (
     <div
@@ -82,14 +88,18 @@ const Order = () => {
             <img src={Bucket} alt="" className='size-[4vh]'/>
             <h1 className='font-Quicksand font-medium text-[1.5vh]'>Broast</h1>
            </div>
+           <div className='flex flex-col gap-[1vh] shadow-lg items-center justify-center h-[13vh] w-[5vw] p-2 bg-white rounded-2xl hover:scale-105 transition-all cursor-pointer'>
+            <img src={Salade} alt="" className='size-[4vh]'/>
+            <h1 className='font-Quicksand font-medium text-[1.5vh]'>Salades</h1>
+           </div>
           </div>
           <div className='h-[63vh] max-w-[60vw] ml-[3vw] rounded-2xl flex flex-col'>
-           <section id='pizzas' className='h-full w-full flex flex-col '>
+           <section id='pizzas' className=' hidden h-full w-full flex flex-col '>
             <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
                <h1 className='font-Quicksand text-2xl'>Pizzas Menu</h1>
                <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:10</h2>
             </div>
-            <div className='h-full max-w-[60vw] overflow-scroll p-4 gap-[1vh] grid grid-cols-2'>
+            <div className='h-full max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
              <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
               <img src={Pizza} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
               <div className='flex flex-col ml-[1vw]'>
@@ -128,6 +138,234 @@ const Order = () => {
                 <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
                 <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
                 <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>$12.99</h3>
+              </div>
+             </div>
+            </div>
+           </section>
+          <section id='Plates' className='hidden h-full w-full flex flex-col '>
+            <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
+               <h1 className='font-Quicksand text-2xl'>Menu des Plates</h1>
+               <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:10</h2>
+            </div>
+            <div className='h-full max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Plates} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+              <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Plates} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>$12.99</h3>
+              </div>
+             </div>
+            </div>
+           </section>
+           <section id='Plates' className='hidden h-full w-full flex flex-col '>
+            <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
+               <h1 className='font-Quicksand text-2xl'>Menu des Plates</h1>
+               <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:10</h2>
+            </div>
+            <div className='h-full max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Plates} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+              <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Plates} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>$12.99</h3>
+              </div>
+             </div>
+            </div>
+           </section>
+           <section id='Salades' className=' h-full w-full flex flex-col '>
+            <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
+               <h1 className='font-Quicksand text-2xl'>Menu des Salades</h1>
+               <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:10</h2>
+            </div>
+            <div className='h-full max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Salades} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+              <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Salades} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>$12.99</h3>
+              </div>
+             </div>
+            </div>
+           </section>
+            <section id='Broast' className='hidden h-full w-full flex flex-col '>
+            <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
+               <h1 className='font-Quicksand text-2xl'>Menu des Broast</h1>
+               <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:10</h2>
+            </div>
+            <div className='h-full max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Broast} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+              <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Broast} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Pizzas Marguerite</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>$12.99</h3>
+              </div>
+             </div>
+            </div>
+           </section>
+           <section id='sandwiches' className='hidden h-full w-full flex flex-col overflow-y-scroll scrollbar-hide '>
+            <div className='h-[10vh] max-w-[55vw] flex justify-between items-center'>
+               <h1 className='font-Quicksand text-2xl'>Sandwiches Menu</h1>
+               <h2 className='font-Quicksand text-sm text-neutral-400'>Resultat:6</h2>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>Tikka</h1>
+            <div className='h-fit max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>Avido</h1>
+            <div className='min-h-fit max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>Special</h1>
+            <div className='h-fit max-w-[60vw]  p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>Le Triangle</h1>
+            <div className='h-fit max-w-[60vw]  p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>American</h1>
+            <div className='h-fit max-w-[60vw]  p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+            </div>
+            <h1 className='font-Quicksand text-md text-neutral-400'>Caprio</h1>
+            <div className='h-fit max-w-[60vw] p-4 gap-[1vh] grid grid-cols-2'>
+              
+             <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             
+               <div className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+              <img src={Sandwich} alt="" className='size-[13vh] rounded-2xl ml-[.5vw] '/>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
               </div>
              </div>
             </div>
