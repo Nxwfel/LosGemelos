@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "Genos";
+    src: url('Genos/Genos-VariableFont_wght.ttf') format('truetype'),
+         url('Genos/Genos-VariableFont_wght.woff2') format('woff2'),
+         url('Genos/Genos-VariableFont_wght.woff') format('woff');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Genos";
+    src: url('Genos/Genos-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype'),
+         url('Quicksand/Quicksand-VariableFont_wght.woff2') format('woff2'),
+         url('Quicksand/Quicksand-VariableFont_wght.woff') format('woff');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Imperial';
+    src: url('Imperial/ImperialScript-Regular.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+}
+.font-Imperial{
+    font-family: 'Imperial', cursive;
+}
+
+.font-genos{
+    font-family:"Genos", sans-serif;
+}
+
+.font-genosi{
+    font-family:"Genos", sans-serif;
+    font-style: italic;
+}
+.font-Quicksand{
+    font-family: 'Quicksand', sans-serif;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
