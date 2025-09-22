@@ -1,0 +1,173 @@
+import React from 'react'
+import Boisson from '../assets/imgs/boissons.png'
+const Tables = () => {
+  return (
+    <div className='h-screen w-screen overflow-hidden bg-[#fdfbfb] flex'>
+     <div className='h-[97%] w-[5vw] mt-[1vh] bg-white border-1 border-neutral-300 rounded-3xl ml-[1vw] flex flex-col items-center justify-items-center-safe gap-[20vh] mr-auto shadow-xl'>
+        <h1 className='font-serif text-5xl bg-white text-[#dba840] mt-[3vh]'>L</h1>
+        <div className='flex flex-col items-center justify-center gap-[5vh] mt-[7vh]'>
+          <div className='flex flex-col h-[8vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white stroke-[#c4c1c3] hover:stroke-white p-2'>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="size-[4vh]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+            <h1 className='font-Quicksand text-[2vh]'>Acceuil</h1>
+          </div>
+          <div className='flex flex-col h-[8.5vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white fill-[#c4c1c3] hover:fill-white p-2'>
+            <svg xmlns="http://www.w3.org/2000/svg" className='size-[4vh]' viewBox="0 0 64 64">
+                    <g  fill-rule="evenodd">
+                        <path d="M61.821 11.045c.703-1.309-.891-.912-.891-.912s-10.627 10.201-12.104 8.951S59.231 8.057 57.825 6.23c-1.301-1.703-11.74 10.455-12.994 8.97c-1.242-1.482 8.939-12.123 8.939-12.123s.387-1.602-.912-.9C36.851 10.785 34.812 18.81 34.812 18.81s-.551 1.563.645 2.771c.117.105-29.204 29.26-33.129 33.196c-1.91 1.908 5.098 8.801 6.996 6.893c3.926-3.936 33.024-33.303 33.129-33.194c1.207 1.205 2.766.652 2.766.652s8.012-2.045 16.602-18.083"/>
+                        <path d="M32.028 40.507c7.803 7.82 20.958 20.999 20.958 20.999s5.742-1.879 6.551-6.729L38.662 33.861a5104.35 5104.35 0 0 0-6.634 6.646M21.76 33.729a5059.26 5059.26 0 0 0 8.387-8.4L7.459 2.598s-.41-.43-1.313.477C4.353 4.862.884 16.248 15.591 30.977c2.331 2.336 4.359 2.66 6.169 2.752"/>
+                    </g>
+                </svg>
+              <h1 className='font-Quicksand text-[2vh]'>Menu</h1>
+            </div>
+            <div className='flex flex-col h-[8vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white fill-[#c4c1c3] hover:fill-white p-2'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='size-[4vh]' viewBox="0 0 24 24"><path  d="M12 22H6a2 2 0 0 1 2-2V8H2V5h14v3h-6v12a2 2 0 0 1 2 2M22 2v20h-2v-7h-5v7h-2v-8a2 2 0 0 1 2-2h5V2Z"/></svg>
+              <h1 className='font-Quicksand text-[2.2vh]'>Tables</h1>
+            </div>
+          </div>
+          </div>
+          <div className='h-screen w-[93vw] ml-[.5vw] flex flex-col'>
+            <h1 className='font-Quicksand text-3xl mt-[2vh] ml-[2vw]'>Tables</h1>
+            <div className='flex mt-[3vh] ml-[3vw] gap-[10vw]'>
+                <div className='flex flex-col items-center grid grid-cols-2'>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>01</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>02</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>03</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>04</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>05</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>06</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>07</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>08</h1>
+                    </div>
+                </div>
+                <div className='flex flex-col items-center grid grid-cols-2'>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>09</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>10</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>11</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>12</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>13</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>14</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>15</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>16</h1>
+                    </div>
+                    
+                </div>
+            <div className='flex flex-col items-center -mb-[20vh]'>
+                <div className='flex mt-auto'>
+                   <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>17</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>18</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>19</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>20</h1>
+                    </div> 
+                </div>
+                <div className='flex '>
+                   <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>21</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>22</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>23</h1>
+                    </div>
+                    <div className='h-[10vh] w-[10vh] rounded-full border-1 border-neutral-300 bg-neutral-100 items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform cursor-pointer flex flex-col'>
+                        <h1 className='font-Quicksand'>24</h1>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div className='absolute flex flex-col top-[15vh] gap-[3vh] left-[10vw] h-[70vh] w-[80vw] bg-white rounded-2xl drop-shadow-2xl p-[5vh]'>
+        <h1 className='text-3xl font-Quicksand'>Table :01</h1>
+        <h2 className='font-Quicksand text-neutral-400 ml-[1vw] '>Bill</h2>
+        <div className='flex'>
+        <div className='h-[35vh] w-[40vw] rounded overflow-scroll flex flex-col items-start justify-start'>
+            <div className='h-[10vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex mt-[2vh]'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='size-[9vh]' viewBox="0 0 128 128"><path fill="#D46F1E" d="M120.83 78.78c-1 2.11-14.62 13.81-23.13 21.15c-8.51 7.34-18.19 13.79-18.19 13.79l-7.48-.44l1.32-62.35l46.21 15.11s1.38.93 1.53 3.13c.14 2.2.58 7.84-.26 9.61z"/><path fill="#E48216" d="M12.16 81.74c-.88.15-2.49.29-3.08 3.52c-.59 3.23.01 9.75 2.36 12.1c5.01 5.01 11.84 6.58 17.15 7.12c4.7.48 7.38.02 8.69.77c2.28 1.32 2.33 3.97 8.26 7.42c4.48 2.61 12.28 5.06 17.7 5.06c9.02 0 16.25-4.01 16.25-4.01l-.15-12.47l-5.28-28.61l-61.9 9.1z"/><path fill="#FADFB1" d="M18.18 92.45c9.89 3.77 22.15 2.35 22.15 2.35s2.79 6.16 12.62 9.39c9.83 3.23 21.86 1.61 29.64-3.81s21.13-17.9 25.67-21.71s10.86-9.54 11-11s-25.38-21.43-25.38-21.43s-80.31 36.58-82.05 37.71c-1.3.86.19 6.15 6.35 8.5z"/><path fill="#EC8B7A" d="M14.8 74.7s-5.13.29-5.13 3.81s1.91 6.46 6.75 8.66s15.26 4.99 23.47 6.9c8.32 1.93 20.98 9.1 28.46 9.83c7.3.72 13.06-5.58 16.43-8.66c3.37-3.08 20.1-15.99 23.91-19.81c3.81-3.81 11.88-12.47 11.88-12.47l-55.16-20.1L14.8 74.7z"/><path fill="#D45E51" d="M19.02 80.03s-2.02-.09-3.31-.37s-3.59-1.2-3.31-.18s2.44 3.16 6.62 5.06c4.51 2.04 10.35 2.43 10.27 2.24c0 0 2.96 2.35 6.28 3.41c4.05 1.29 8.28 2.5 11.49 2.78c3.05.27 3.6-.34 2.5-1.45s-4.05-2.94-4.05-2.94l-15.64-9.29l-10.85.74zm34.5 13.61c-.12 1.04 4.69 3.59 8.19 5.06s9.64 3.39 9.29-1.01c-.24-3.01-4.02-3.34-8.28-3.77c-4.48-.45-9.1-1.13-9.2-.28z"/><path fill="#B7D019" d="M12.67 57.58s-4.88 9.2-6.53 8.83s-2.39-1.47-3.13-.55s-.83 7.91 3.04 9.02s4.39-.24 6.69.77s5.25 2.69 5.25 2.69s-1.8 1.56-1.53 2.02s3.2 1.9 4.58 3.19s1.64 2.71 7.9 3.72s7.75.94 10.05.67s3.22-1.38 3.22-1.38s3.31 4.42 6.62 4.6s4.23-.92 5.34-.92s-.55 1.1 2.94 1.1s7.49.32 12.13 1.58c3.27.89 6.36 4.21 8.48 4.95s5.24.09 6.16-.92s.9-3.44 2.64-5.27s6.28-4.16 7.84-5.82s2.58-6.85 2.58-6.85s2.12 1.66 3.96 1.29s3.96-3.59 5.61-3.86s3.31-.74 4.88-2.3s.92-5.7 1.93-6.44s4.88 1.56 6.9 1.01s3.96-3.5 3.5-5.43c-.46-1.93-.92-2.21-.92-3.31s1.2-2.94-.28-4.78s-26.69-11.87-26.69-11.87L12.67 57.58z"/><path fill="#96A819" d="M21.04 72.85s-1.2 2.67-.74 3.22s7.27 6.16 8.92 6.35s13.62-.28 13.62-.28l-5.15-9.29H21.04zm43.24 1.66s-5.24 11.5-4.6 12.51s5.8 1.2 10.21 2.39s5.7 1.84 7.18 1.75s7.54-3.5 7.64-4.6s-4.69-6.62-4.69-6.62l-15.74-5.43zm30.45-3.5l-1.84 4.78s8.56.55 12.42-1.29s6.66-8.51 7.86-10.53c1.66-2.78 4-5.18 3.81-6.19s-6.06-4.9-6.06-4.9L94.73 71.01z"/><path fill="#DC0D2A" d="M95.47 72.02s-9.29 2.39-9.48 2.94s-8.65 9.84-8.65 9.84s6.26 3.04 13.25-.92c6.99-3.94 4.88-11.86 4.88-11.86zm22.72-27.41s5.06 1.38 4.23 7.64c-.97 7.32-13.34 6.99-13.34 6.99s-3.31-8.83-2.76-9.29s11.87-5.34 11.87-5.34zM44.78 72.76l-7.45 3.86s1.2 7.82 13.62 9.94s19.32-8.65 19.32-8.65l-25.49-5.15zm-22.36-8l-8.19.37s-.3 5.31 3.96 8.37c5.31 3.81 13.06 2.02 13.06 2.02l-8.83-10.76z"/><path fill="#FEDF64" d="m37.6 63.1l-15.64 3.96S29.87 77.55 33 77.82s18.58-2.94 18.58-2.94L37.6 63.1zm23.55 15.82s9.67 7.81 14.08 7.45c3.4-.28 7.7-6.24 13.32-9.28s14.11-5.27 15.57-6.36c2.89-2.16 6.9-13.98 8.83-16.74s6.72-9.11 6.81-10.12s-.83-4.23-.83-4.23L82.4 68.62l-21.25 10.3z"/><path fill="#D46F1E" d="M68.97 77.45c.46-.09 9.38.92 9.38.92s7.21-5.58 18.25-14.69s21.33-18.95 23.63-22.95c.66-1.14.95-8.16.98-9.92c.06-3.06-1.64-3.63-1.64-3.63l-49.6 35.55l-1 14.72z"/><path fill="#E38211" d="M78.45 64.66c0 .92.61 13.12-.09 13.71c-1.66 1.38-16.19 5.43-28.52-.18c-11.85-5.39-13.9-10.21-13.9-10.21s-15.02 1.71-23.92-3.31c-5.7-3.22-5.98-9.48-5.89-12.7s.46-6.26 1.75-7.64s18.13-15.45 21.72-18.3c3.59-2.85 19.59-14.63 22.08-15.09s23.83 3.68 31 5.34s28.06 7.08 31.65 8.46s5.8 2.21 5.89 3.22s-1.01 2.58-2.3 3.68c-1.29 1.1-28.98-.37-29.71 4.69s-9.76 28.33-9.76 28.33z"/><path fill="#FADFB1" d="M52.14 13.28c-2.79.49-18.52 12.89-22.96 16.46S13.26 42.63 11.31 44.36c-1.95 1.73-4.12 8.12 5.41 11.8c9.53 3.68 22.85 1.95 22.85 1.95s4.77 9.31 16.14 10.51s19.17.76 24.15-3.25c4.98-4.01 21.55-18.09 25.34-21.55c3.79-3.47 13.51-12.12 13.32-13.32c-.54-3.47-27.18-9.31-38.55-11.91c-10.25-2.35-25.34-5.74-27.83-5.31z"/></svg>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             <div className='h-[10vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex mt-[2vh]'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='size-[9vh]' viewBox="0 0 128 128"><path fill="#D46F1E" d="M120.83 78.78c-1 2.11-14.62 13.81-23.13 21.15c-8.51 7.34-18.19 13.79-18.19 13.79l-7.48-.44l1.32-62.35l46.21 15.11s1.38.93 1.53 3.13c.14 2.2.58 7.84-.26 9.61z"/><path fill="#E48216" d="M12.16 81.74c-.88.15-2.49.29-3.08 3.52c-.59 3.23.01 9.75 2.36 12.1c5.01 5.01 11.84 6.58 17.15 7.12c4.7.48 7.38.02 8.69.77c2.28 1.32 2.33 3.97 8.26 7.42c4.48 2.61 12.28 5.06 17.7 5.06c9.02 0 16.25-4.01 16.25-4.01l-.15-12.47l-5.28-28.61l-61.9 9.1z"/><path fill="#FADFB1" d="M18.18 92.45c9.89 3.77 22.15 2.35 22.15 2.35s2.79 6.16 12.62 9.39c9.83 3.23 21.86 1.61 29.64-3.81s21.13-17.9 25.67-21.71s10.86-9.54 11-11s-25.38-21.43-25.38-21.43s-80.31 36.58-82.05 37.71c-1.3.86.19 6.15 6.35 8.5z"/><path fill="#EC8B7A" d="M14.8 74.7s-5.13.29-5.13 3.81s1.91 6.46 6.75 8.66s15.26 4.99 23.47 6.9c8.32 1.93 20.98 9.1 28.46 9.83c7.3.72 13.06-5.58 16.43-8.66c3.37-3.08 20.1-15.99 23.91-19.81c3.81-3.81 11.88-12.47 11.88-12.47l-55.16-20.1L14.8 74.7z"/><path fill="#D45E51" d="M19.02 80.03s-2.02-.09-3.31-.37s-3.59-1.2-3.31-.18s2.44 3.16 6.62 5.06c4.51 2.04 10.35 2.43 10.27 2.24c0 0 2.96 2.35 6.28 3.41c4.05 1.29 8.28 2.5 11.49 2.78c3.05.27 3.6-.34 2.5-1.45s-4.05-2.94-4.05-2.94l-15.64-9.29l-10.85.74zm34.5 13.61c-.12 1.04 4.69 3.59 8.19 5.06s9.64 3.39 9.29-1.01c-.24-3.01-4.02-3.34-8.28-3.77c-4.48-.45-9.1-1.13-9.2-.28z"/><path fill="#B7D019" d="M12.67 57.58s-4.88 9.2-6.53 8.83s-2.39-1.47-3.13-.55s-.83 7.91 3.04 9.02s4.39-.24 6.69.77s5.25 2.69 5.25 2.69s-1.8 1.56-1.53 2.02s3.2 1.9 4.58 3.19s1.64 2.71 7.9 3.72s7.75.94 10.05.67s3.22-1.38 3.22-1.38s3.31 4.42 6.62 4.6s4.23-.92 5.34-.92s-.55 1.1 2.94 1.1s7.49.32 12.13 1.58c3.27.89 6.36 4.21 8.48 4.95s5.24.09 6.16-.92s.9-3.44 2.64-5.27s6.28-4.16 7.84-5.82s2.58-6.85 2.58-6.85s2.12 1.66 3.96 1.29s3.96-3.59 5.61-3.86s3.31-.74 4.88-2.3s.92-5.7 1.93-6.44s4.88 1.56 6.9 1.01s3.96-3.5 3.5-5.43c-.46-1.93-.92-2.21-.92-3.31s1.2-2.94-.28-4.78s-26.69-11.87-26.69-11.87L12.67 57.58z"/><path fill="#96A819" d="M21.04 72.85s-1.2 2.67-.74 3.22s7.27 6.16 8.92 6.35s13.62-.28 13.62-.28l-5.15-9.29H21.04zm43.24 1.66s-5.24 11.5-4.6 12.51s5.8 1.2 10.21 2.39s5.7 1.84 7.18 1.75s7.54-3.5 7.64-4.6s-4.69-6.62-4.69-6.62l-15.74-5.43zm30.45-3.5l-1.84 4.78s8.56.55 12.42-1.29s6.66-8.51 7.86-10.53c1.66-2.78 4-5.18 3.81-6.19s-6.06-4.9-6.06-4.9L94.73 71.01z"/><path fill="#DC0D2A" d="M95.47 72.02s-9.29 2.39-9.48 2.94s-8.65 9.84-8.65 9.84s6.26 3.04 13.25-.92c6.99-3.94 4.88-11.86 4.88-11.86zm22.72-27.41s5.06 1.38 4.23 7.64c-.97 7.32-13.34 6.99-13.34 6.99s-3.31-8.83-2.76-9.29s11.87-5.34 11.87-5.34zM44.78 72.76l-7.45 3.86s1.2 7.82 13.62 9.94s19.32-8.65 19.32-8.65l-25.49-5.15zm-22.36-8l-8.19.37s-.3 5.31 3.96 8.37c5.31 3.81 13.06 2.02 13.06 2.02l-8.83-10.76z"/><path fill="#FEDF64" d="m37.6 63.1l-15.64 3.96S29.87 77.55 33 77.82s18.58-2.94 18.58-2.94L37.6 63.1zm23.55 15.82s9.67 7.81 14.08 7.45c3.4-.28 7.7-6.24 13.32-9.28s14.11-5.27 15.57-6.36c2.89-2.16 6.9-13.98 8.83-16.74s6.72-9.11 6.81-10.12s-.83-4.23-.83-4.23L82.4 68.62l-21.25 10.3z"/><path fill="#D46F1E" d="M68.97 77.45c.46-.09 9.38.92 9.38.92s7.21-5.58 18.25-14.69s21.33-18.95 23.63-22.95c.66-1.14.95-8.16.98-9.92c.06-3.06-1.64-3.63-1.64-3.63l-49.6 35.55l-1 14.72z"/><path fill="#E38211" d="M78.45 64.66c0 .92.61 13.12-.09 13.71c-1.66 1.38-16.19 5.43-28.52-.18c-11.85-5.39-13.9-10.21-13.9-10.21s-15.02 1.71-23.92-3.31c-5.7-3.22-5.98-9.48-5.89-12.7s.46-6.26 1.75-7.64s18.13-15.45 21.72-18.3c3.59-2.85 19.59-14.63 22.08-15.09s23.83 3.68 31 5.34s28.06 7.08 31.65 8.46s5.8 2.21 5.89 3.22s-1.01 2.58-2.3 3.68c-1.29 1.1-28.98-.37-29.71 4.69s-9.76 28.33-9.76 28.33z"/><path fill="#FADFB1" d="M52.14 13.28c-2.79.49-18.52 12.89-22.96 16.46S13.26 42.63 11.31 44.36c-1.95 1.73-4.12 8.12 5.41 11.8c9.53 3.68 22.85 1.95 22.85 1.95s4.77 9.31 16.14 10.51s19.17.76 24.15-3.25c4.98-4.01 21.55-18.09 25.34-21.55c3.79-3.47 13.51-12.12 13.32-13.32c-.54-3.47-27.18-9.31-38.55-11.91c-10.25-2.35-25.34-5.74-27.83-5.31z"/></svg>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             <div className='h-[10vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex mt-[2vh]'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='size-[9vh]' viewBox="0 0 128 128"><path fill="#D46F1E" d="M120.83 78.78c-1 2.11-14.62 13.81-23.13 21.15c-8.51 7.34-18.19 13.79-18.19 13.79l-7.48-.44l1.32-62.35l46.21 15.11s1.38.93 1.53 3.13c.14 2.2.58 7.84-.26 9.61z"/><path fill="#E48216" d="M12.16 81.74c-.88.15-2.49.29-3.08 3.52c-.59 3.23.01 9.75 2.36 12.1c5.01 5.01 11.84 6.58 17.15 7.12c4.7.48 7.38.02 8.69.77c2.28 1.32 2.33 3.97 8.26 7.42c4.48 2.61 12.28 5.06 17.7 5.06c9.02 0 16.25-4.01 16.25-4.01l-.15-12.47l-5.28-28.61l-61.9 9.1z"/><path fill="#FADFB1" d="M18.18 92.45c9.89 3.77 22.15 2.35 22.15 2.35s2.79 6.16 12.62 9.39c9.83 3.23 21.86 1.61 29.64-3.81s21.13-17.9 25.67-21.71s10.86-9.54 11-11s-25.38-21.43-25.38-21.43s-80.31 36.58-82.05 37.71c-1.3.86.19 6.15 6.35 8.5z"/><path fill="#EC8B7A" d="M14.8 74.7s-5.13.29-5.13 3.81s1.91 6.46 6.75 8.66s15.26 4.99 23.47 6.9c8.32 1.93 20.98 9.1 28.46 9.83c7.3.72 13.06-5.58 16.43-8.66c3.37-3.08 20.1-15.99 23.91-19.81c3.81-3.81 11.88-12.47 11.88-12.47l-55.16-20.1L14.8 74.7z"/><path fill="#D45E51" d="M19.02 80.03s-2.02-.09-3.31-.37s-3.59-1.2-3.31-.18s2.44 3.16 6.62 5.06c4.51 2.04 10.35 2.43 10.27 2.24c0 0 2.96 2.35 6.28 3.41c4.05 1.29 8.28 2.5 11.49 2.78c3.05.27 3.6-.34 2.5-1.45s-4.05-2.94-4.05-2.94l-15.64-9.29l-10.85.74zm34.5 13.61c-.12 1.04 4.69 3.59 8.19 5.06s9.64 3.39 9.29-1.01c-.24-3.01-4.02-3.34-8.28-3.77c-4.48-.45-9.1-1.13-9.2-.28z"/><path fill="#B7D019" d="M12.67 57.58s-4.88 9.2-6.53 8.83s-2.39-1.47-3.13-.55s-.83 7.91 3.04 9.02s4.39-.24 6.69.77s5.25 2.69 5.25 2.69s-1.8 1.56-1.53 2.02s3.2 1.9 4.58 3.19s1.64 2.71 7.9 3.72s7.75.94 10.05.67s3.22-1.38 3.22-1.38s3.31 4.42 6.62 4.6s4.23-.92 5.34-.92s-.55 1.1 2.94 1.1s7.49.32 12.13 1.58c3.27.89 6.36 4.21 8.48 4.95s5.24.09 6.16-.92s.9-3.44 2.64-5.27s6.28-4.16 7.84-5.82s2.58-6.85 2.58-6.85s2.12 1.66 3.96 1.29s3.96-3.59 5.61-3.86s3.31-.74 4.88-2.3s.92-5.7 1.93-6.44s4.88 1.56 6.9 1.01s3.96-3.5 3.5-5.43c-.46-1.93-.92-2.21-.92-3.31s1.2-2.94-.28-4.78s-26.69-11.87-26.69-11.87L12.67 57.58z"/><path fill="#96A819" d="M21.04 72.85s-1.2 2.67-.74 3.22s7.27 6.16 8.92 6.35s13.62-.28 13.62-.28l-5.15-9.29H21.04zm43.24 1.66s-5.24 11.5-4.6 12.51s5.8 1.2 10.21 2.39s5.7 1.84 7.18 1.75s7.54-3.5 7.64-4.6s-4.69-6.62-4.69-6.62l-15.74-5.43zm30.45-3.5l-1.84 4.78s8.56.55 12.42-1.29s6.66-8.51 7.86-10.53c1.66-2.78 4-5.18 3.81-6.19s-6.06-4.9-6.06-4.9L94.73 71.01z"/><path fill="#DC0D2A" d="M95.47 72.02s-9.29 2.39-9.48 2.94s-8.65 9.84-8.65 9.84s6.26 3.04 13.25-.92c6.99-3.94 4.88-11.86 4.88-11.86zm22.72-27.41s5.06 1.38 4.23 7.64c-.97 7.32-13.34 6.99-13.34 6.99s-3.31-8.83-2.76-9.29s11.87-5.34 11.87-5.34zM44.78 72.76l-7.45 3.86s1.2 7.82 13.62 9.94s19.32-8.65 19.32-8.65l-25.49-5.15zm-22.36-8l-8.19.37s-.3 5.31 3.96 8.37c5.31 3.81 13.06 2.02 13.06 2.02l-8.83-10.76z"/><path fill="#FEDF64" d="m37.6 63.1l-15.64 3.96S29.87 77.55 33 77.82s18.58-2.94 18.58-2.94L37.6 63.1zm23.55 15.82s9.67 7.81 14.08 7.45c3.4-.28 7.7-6.24 13.32-9.28s14.11-5.27 15.57-6.36c2.89-2.16 6.9-13.98 8.83-16.74s6.72-9.11 6.81-10.12s-.83-4.23-.83-4.23L82.4 68.62l-21.25 10.3z"/><path fill="#D46F1E" d="M68.97 77.45c.46-.09 9.38.92 9.38.92s7.21-5.58 18.25-14.69s21.33-18.95 23.63-22.95c.66-1.14.95-8.16.98-9.92c.06-3.06-1.64-3.63-1.64-3.63l-49.6 35.55l-1 14.72z"/><path fill="#E38211" d="M78.45 64.66c0 .92.61 13.12-.09 13.71c-1.66 1.38-16.19 5.43-28.52-.18c-11.85-5.39-13.9-10.21-13.9-10.21s-15.02 1.71-23.92-3.31c-5.7-3.22-5.98-9.48-5.89-12.7s.46-6.26 1.75-7.64s18.13-15.45 21.72-18.3c3.59-2.85 19.59-14.63 22.08-15.09s23.83 3.68 31 5.34s28.06 7.08 31.65 8.46s5.8 2.21 5.89 3.22s-1.01 2.58-2.3 3.68c-1.29 1.1-28.98-.37-29.71 4.69s-9.76 28.33-9.76 28.33z"/><path fill="#FADFB1" d="M52.14 13.28c-2.79.49-18.52 12.89-22.96 16.46S13.26 42.63 11.31 44.36c-1.95 1.73-4.12 8.12 5.41 11.8c9.53 3.68 22.85 1.95 22.85 1.95s4.77 9.31 16.14 10.51s19.17.76 24.15-3.25c4.98-4.01 21.55-18.09 25.34-21.55c3.79-3.47 13.51-12.12 13.32-13.32c-.54-3.47-27.18-9.31-38.55-11.91c-10.25-2.35-25.34-5.74-27.83-5.31z"/></svg>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+             <div className='h-[10vh] w-[25vw] bg-white shadow-lg rounded-2xl items-center justify-start flex mt-[2vh]'>
+              <svg xmlns="http://www.w3.org/2000/svg" className='size-[9vh]' viewBox="0 0 128 128"><path fill="#D46F1E" d="M120.83 78.78c-1 2.11-14.62 13.81-23.13 21.15c-8.51 7.34-18.19 13.79-18.19 13.79l-7.48-.44l1.32-62.35l46.21 15.11s1.38.93 1.53 3.13c.14 2.2.58 7.84-.26 9.61z"/><path fill="#E48216" d="M12.16 81.74c-.88.15-2.49.29-3.08 3.52c-.59 3.23.01 9.75 2.36 12.1c5.01 5.01 11.84 6.58 17.15 7.12c4.7.48 7.38.02 8.69.77c2.28 1.32 2.33 3.97 8.26 7.42c4.48 2.61 12.28 5.06 17.7 5.06c9.02 0 16.25-4.01 16.25-4.01l-.15-12.47l-5.28-28.61l-61.9 9.1z"/><path fill="#FADFB1" d="M18.18 92.45c9.89 3.77 22.15 2.35 22.15 2.35s2.79 6.16 12.62 9.39c9.83 3.23 21.86 1.61 29.64-3.81s21.13-17.9 25.67-21.71s10.86-9.54 11-11s-25.38-21.43-25.38-21.43s-80.31 36.58-82.05 37.71c-1.3.86.19 6.15 6.35 8.5z"/><path fill="#EC8B7A" d="M14.8 74.7s-5.13.29-5.13 3.81s1.91 6.46 6.75 8.66s15.26 4.99 23.47 6.9c8.32 1.93 20.98 9.1 28.46 9.83c7.3.72 13.06-5.58 16.43-8.66c3.37-3.08 20.1-15.99 23.91-19.81c3.81-3.81 11.88-12.47 11.88-12.47l-55.16-20.1L14.8 74.7z"/><path fill="#D45E51" d="M19.02 80.03s-2.02-.09-3.31-.37s-3.59-1.2-3.31-.18s2.44 3.16 6.62 5.06c4.51 2.04 10.35 2.43 10.27 2.24c0 0 2.96 2.35 6.28 3.41c4.05 1.29 8.28 2.5 11.49 2.78c3.05.27 3.6-.34 2.5-1.45s-4.05-2.94-4.05-2.94l-15.64-9.29l-10.85.74zm34.5 13.61c-.12 1.04 4.69 3.59 8.19 5.06s9.64 3.39 9.29-1.01c-.24-3.01-4.02-3.34-8.28-3.77c-4.48-.45-9.1-1.13-9.2-.28z"/><path fill="#B7D019" d="M12.67 57.58s-4.88 9.2-6.53 8.83s-2.39-1.47-3.13-.55s-.83 7.91 3.04 9.02s4.39-.24 6.69.77s5.25 2.69 5.25 2.69s-1.8 1.56-1.53 2.02s3.2 1.9 4.58 3.19s1.64 2.71 7.9 3.72s7.75.94 10.05.67s3.22-1.38 3.22-1.38s3.31 4.42 6.62 4.6s4.23-.92 5.34-.92s-.55 1.1 2.94 1.1s7.49.32 12.13 1.58c3.27.89 6.36 4.21 8.48 4.95s5.24.09 6.16-.92s.9-3.44 2.64-5.27s6.28-4.16 7.84-5.82s2.58-6.85 2.58-6.85s2.12 1.66 3.96 1.29s3.96-3.59 5.61-3.86s3.31-.74 4.88-2.3s.92-5.7 1.93-6.44s4.88 1.56 6.9 1.01s3.96-3.5 3.5-5.43c-.46-1.93-.92-2.21-.92-3.31s1.2-2.94-.28-4.78s-26.69-11.87-26.69-11.87L12.67 57.58z"/><path fill="#96A819" d="M21.04 72.85s-1.2 2.67-.74 3.22s7.27 6.16 8.92 6.35s13.62-.28 13.62-.28l-5.15-9.29H21.04zm43.24 1.66s-5.24 11.5-4.6 12.51s5.8 1.2 10.21 2.39s5.7 1.84 7.18 1.75s7.54-3.5 7.64-4.6s-4.69-6.62-4.69-6.62l-15.74-5.43zm30.45-3.5l-1.84 4.78s8.56.55 12.42-1.29s6.66-8.51 7.86-10.53c1.66-2.78 4-5.18 3.81-6.19s-6.06-4.9-6.06-4.9L94.73 71.01z"/><path fill="#DC0D2A" d="M95.47 72.02s-9.29 2.39-9.48 2.94s-8.65 9.84-8.65 9.84s6.26 3.04 13.25-.92c6.99-3.94 4.88-11.86 4.88-11.86zm22.72-27.41s5.06 1.38 4.23 7.64c-.97 7.32-13.34 6.99-13.34 6.99s-3.31-8.83-2.76-9.29s11.87-5.34 11.87-5.34zM44.78 72.76l-7.45 3.86s1.2 7.82 13.62 9.94s19.32-8.65 19.32-8.65l-25.49-5.15zm-22.36-8l-8.19.37s-.3 5.31 3.96 8.37c5.31 3.81 13.06 2.02 13.06 2.02l-8.83-10.76z"/><path fill="#FEDF64" d="m37.6 63.1l-15.64 3.96S29.87 77.55 33 77.82s18.58-2.94 18.58-2.94L37.6 63.1zm23.55 15.82s9.67 7.81 14.08 7.45c3.4-.28 7.7-6.24 13.32-9.28s14.11-5.27 15.57-6.36c2.89-2.16 6.9-13.98 8.83-16.74s6.72-9.11 6.81-10.12s-.83-4.23-.83-4.23L82.4 68.62l-21.25 10.3z"/><path fill="#D46F1E" d="M68.97 77.45c.46-.09 9.38.92 9.38.92s7.21-5.58 18.25-14.69s21.33-18.95 23.63-22.95c.66-1.14.95-8.16.98-9.92c.06-3.06-1.64-3.63-1.64-3.63l-49.6 35.55l-1 14.72z"/><path fill="#E38211" d="M78.45 64.66c0 .92.61 13.12-.09 13.71c-1.66 1.38-16.19 5.43-28.52-.18c-11.85-5.39-13.9-10.21-13.9-10.21s-15.02 1.71-23.92-3.31c-5.7-3.22-5.98-9.48-5.89-12.7s.46-6.26 1.75-7.64s18.13-15.45 21.72-18.3c3.59-2.85 19.59-14.63 22.08-15.09s23.83 3.68 31 5.34s28.06 7.08 31.65 8.46s5.8 2.21 5.89 3.22s-1.01 2.58-2.3 3.68c-1.29 1.1-28.98-.37-29.71 4.69s-9.76 28.33-9.76 28.33z"/><path fill="#FADFB1" d="M52.14 13.28c-2.79.49-18.52 12.89-22.96 16.46S13.26 42.63 11.31 44.36c-1.95 1.73-4.12 8.12 5.41 11.8c9.53 3.68 22.85 1.95 22.85 1.95s4.77 9.31 16.14 10.51s19.17.76 24.15-3.25c4.98-4.01 21.55-18.09 25.34-21.55c3.79-3.47 13.51-12.12 13.32-13.32c-.54-3.47-27.18-9.31-38.55-11.91c-10.25-2.35-25.34-5.74-27.83-5.31z"/></svg>
+              <div className='flex flex-col ml-[1vw]'>
+                <h1 className='font-Quicksand text-md'>Tikka</h1>
+                <h2 className='font-Quicksand text-sm text-neutral-400'>Tomato, Mozzarella, Basil</h2>
+                <h3 className='font-Quicksand text-lg font-bold mt-[1vh]'>400 DA</h3>
+              </div>
+             </div>
+        </div>
+        <div className='h-[45vh] w-[40vw] -mt-[5vh] rounded overflow-scroll flex flex-col items-start justify-start'>
+          <div className='h-[10vh] w-[10vh] items-center justify-center '>
+            <img src={Boisson} alt="" className='size-[8vh]'/>
+          </div>
+        </div>
+        </div>
+        <button
+            className="inline-block font-Quicksand -mt-[1vh] cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-3 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl"
+            >
+            Imprimer
+            <span class="text-slate-300/85"> ─ Imprimer le ticket</span>
+        </button>
+    </div>
+</div>
+  )
+}
+
+export default Tables
