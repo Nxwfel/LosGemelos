@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {motion} from 'framer-motion'
 import {Link} from 'react-router-dom'
 const Order = () => {
   const [activeSection, setActiveSection] = useState('pizzas');
@@ -292,9 +293,16 @@ const Order = () => {
               <h1 className='font-sans text-2xl'>Menu des Salades</h1>
               <h2 className='font-sans text-sm text-neutral-400'>Resultat:6</h2>
             </div>
-            <div className='h-full max-w-[60vw] overflow-scroll p-4 gap-[1vh] grid grid-cols-2'>
+            <div 
+
+            
+            className='h-full max-w-[60vw] overflow-scroll p-4 gap-[1vh] grid grid-cols-2'>
               {[...Array(6)].map((_, index) => (
-                <div key={index} className='h-[15vh] w-[25vw] bg-white shadow-xl rounded-2xl items-center justify-start flex'>
+                <motion.div key={index} 
+                initial={{scale:1}}
+                onHover={{scale:2}}
+                onClick={() => setHidden((prev) => !prev)}
+                className='h-[15vh] w-[25vw] bg-white shadow-xl hover:scale-110 hover:transition-transform cursor-pointer rounded-2xl items-center justify-start flex'>
                   <div className='size-[13vh] rounded-2xl ml-[.5vw] bg-green-100 flex items-center justify-center'>
                     <span className='text-2xl'>🥗</span>
                   </div>
@@ -303,7 +311,7 @@ const Order = () => {
                     <h2 className='font-sans text-sm text-neutral-400'>Lettuce, croutons, dressing</h2>
                     <h3 className='font-sans text-lg font-bold mt-[1vh]'>320 DA</h3>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </section>
@@ -358,19 +366,35 @@ const Order = () => {
         );
     }
   };
+  const [hidden, setHidden] = useState(false);
 
   return (
     <div className='h-screen w-screen overflow-hidden bg-[#fdfbfb] flex'>
-      <div className='absolute ml-[40vw] mt-[30vh] h-[40vh] w-[20vw] bg-white justify-center items-center drop-shadow-2xl rounded-xl'>
-        <div className='h-[15vh] w-full  rounded-2xl items-center justify-start flex'>
-                  <div className='flex w-full px-3 justify-between ml-[1vw]'>
-                    <div className='flex flex-col'>
+      <div className={`${hidden ? '' : 'hidden'} absolute ml-[40vw] mt-[30vh] h-[40vh] w-[20vw] bg-white justify-center text-center items-center drop-shadow-2xl rounded-xl`}>
+        <div className='h-4 w-full'>
+          <p
+            onClick={() => setHidden((prev) => !prev)}
+            className='px-3 bg-amber-200 cursor-pointer text-white'
+          >
+            x
+          </p>
+        </div>
+        <div className='h-[15vh] w-full  rounded-2xl items-center justify-center flex'>
+                    <div className='flex flex-col items-center'>
                     <h1 className='font-sans text-md'>Salade César</h1>
                     <h2 className='font-sans text-sm text-neutral-400'>Lettuce, croutons, dressing</h2>
                     </div>
-                    <h3 className='font-sans text-lg font-bold mt-[1vh]'>320 DA</h3>
-                  </div>
-                </div>
+                    
+         </div>
+         <h1 className='font-Quicksand text-black mb-[1vh]'>Quantity</h1>
+         <div className='flex justify-center items-center'>
+                      <p className='font-Quicksand text-md text-black bg-emerald-200 px-2 rounded-2xl cursor-pointer'>+</p>
+                      <p className='font-Quicksand text-md text-black mx-2'>1</p>
+                      <p className='font-Quicksand text-md text-black bg-amber-200 px-2 rounded-2xl cursor-pointer'>-</p>
+         </div>
+         <button className="inline-block mt-[5vh] font-Quicksand cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl">
+              Ajouter au order
+            </button>
       </div>
       {/* Sidebar */}
       <div className='h-[97%] w-[8vw] mt-[1vh] bg-white border-1 border-neutral-300 rounded-3xl ml-[1vw] flex flex-col items-center justify-items-center-safe gap-[20vh] mr-auto shadow-xl'>
