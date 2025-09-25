@@ -1,36 +1,23 @@
-Genos Variable Font
-===================
+Oswald Variable Font
+====================
 
-This download contains Genos as both variable fonts and static fonts.
+This download contains Oswald as both a variable font and static fonts.
 
-Genos is a variable font with this axis:
+Oswald is a variable font with this axis:
   wght
 
-This means all the styles are contained in these files:
-  Genos/Genos-VariableFont_wght.ttf
-  Genos/Genos-Italic-VariableFont_wght.ttf
+This means all the styles are contained in a single file:
+  Oswald-VariableFont_wght.ttf
 
 If your app fully supports variable fonts, you can now pick intermediate styles
 that aren’t available as static fonts. Not all apps support variable fonts, and
-in those cases you can use the static font files for Genos:
-  Genos/static/Genos-Thin.ttf
-  Genos/static/Genos-ExtraLight.ttf
-  Genos/static/Genos-Light.ttf
-  Genos/static/Genos-Regular.ttf
-  Genos/static/Genos-Medium.ttf
-  Genos/static/Genos-SemiBold.ttf
-  Genos/static/Genos-Bold.ttf
-  Genos/static/Genos-ExtraBold.ttf
-  Genos/static/Genos-Black.ttf
-  Genos/static/Genos-ThinItalic.ttf
-  Genos/static/Genos-ExtraLightItalic.ttf
-  Genos/static/Genos-LightItalic.ttf
-  Genos/static/Genos-Italic.ttf
-  Genos/static/Genos-MediumItalic.ttf
-  Genos/static/Genos-SemiBoldItalic.ttf
-  Genos/static/Genos-BoldItalic.ttf
-  Genos/static/Genos-ExtraBoldItalic.ttf
-  Genos/static/Genos-BlackItalic.ttf
+in those cases you can use the static font files for Oswald:
+  static/Oswald-ExtraLight.ttf
+  static/Oswald-Light.ttf
+  static/Oswald-Regular.ttf
+  static/Oswald-Medium.ttf
+  static/Oswald-SemiBold.ttf
+  static/Oswald-Bold.ttf
 
 Get started
 -----------
