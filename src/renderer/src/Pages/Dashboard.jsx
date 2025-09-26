@@ -249,20 +249,12 @@ const Dashboard = () => {
       <section id='Frais' className={`h-[87vh] w-[98%] flex items-center justify-center ${
         activesection === "Frais" ? "" : "hidden"
       }`}>
-         <div class="flex flex-col items-center justify-center h-screen ">
+         <div class="flex flex-col items-center justify-center h-fit ">
   <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Product Feedback Form</h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Frais</h2>
 
     <form class="flex flex-col">
-      <input placeholder="Full Name" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text"/>
-      <input placeholder="Email" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="email"/>
-      <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product" >
-        <option value="product-1">Product 1</option>
-        <option value="product-2">Product 2</option>
-        <option value="product-3">Product 3</option>
-      </select>
-      <input placeholder="Rating (1-5)" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="number"/>
-      <textarea placeholder="Feedback" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" name="feedback"></textarea>
+      <input placeholder="Ajouter un montant au frais" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text"/>
 
       <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Submit</button>
     </form>
@@ -273,39 +265,39 @@ const Dashboard = () => {
       <section id='Paramètres' className={`h-[80vh] w-[98%] flex items-center justify-center gap-[3vw] ${
         activesection === "Paramètres" ? "" : "hidden"
       }`}>
-<div class="flex flex-col items-center justify-center h-screen light">
+
+<div class="flex flex-col items-center justify-center h-fit light ">
   <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Product Feedback Form</h2>
+    <h2 class="text-2xl font-Quicksand text-gray-800 mb-4">Ajouter un produit</h2>
 
     <form class="flex flex-col">
-      <input placeholder="Full Name" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" />
-      <input placeholder="Email" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="email" />
+      <input placeholder="Nom du produit" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" />
       <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
-        <option value="product-1">Product 1</option>
-        <option value="product-2">Product 2</option>
-        <option value="product-3">Product 3</option>
+        <option value="product-1">Category</option>
+        <option value="product-2">Pizzas</option>
+        <option value="product-3">Tacos</option>
       </select>
-      <input placeholder="Rating (1-5)" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="number"/>
-      <textarea placeholder="Feedback" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" name="feedback"></textarea>
+      <textarea placeholder="Description du produit" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" name="feedback"></textarea>
 
       <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Submit</button>
     </form>
   </div>
 </div>
-<div class="flex flex-col items-center justify-center h-screen light">
+<div class="flex flex-col items-center justify-center h-fit light">
   <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Product Feedback Form</h2>
+    <h2 class="text-2xl font-Quicksand text-gray-800 mb-4">Effacer un Produit</h2>
 
     <form class="flex flex-col">
-      <input placeholder="Full Name" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" />
-      <input placeholder="Email" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="email" />
+      <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
+        <option value="product-1">Category</option>
+        <option value="product-2">Product 2</option>
+        <option value="product-3">Product 3</option>
+      </select>
       <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
         <option value="product-1">Product 1</option>
         <option value="product-2">Product 2</option>
         <option value="product-3">Product 3</option>
       </select>
-      <input placeholder="Rating (1-5)" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="number"/>
-      <textarea placeholder="Feedback" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" name="feedback"></textarea>
 
       <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Submit</button>
     </form>
