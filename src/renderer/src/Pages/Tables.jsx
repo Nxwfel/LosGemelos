@@ -1,6 +1,11 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect} from 'react'
 import {Link} from 'react-router-dom'
 const Tables = () => {
+  useEffect (() => {
+   fetch("http://localhost:8000/")
+   .then(res => res.json())
+   .then(res => console.log(res))
+  })
     const [hidden, setHidden] = useState(false);
   return (
     <div className='h-screen w-screen overflow-hidden bg-[#fdfbfb] flex'>

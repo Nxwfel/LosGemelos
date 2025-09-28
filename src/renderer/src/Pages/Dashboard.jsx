@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Chart } from 'primereact/chart';
 import { BarChart, Bar } from 'recharts';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -130,9 +131,62 @@ const Dashboard = () => {
   },
 ];
   const [activesection , setActivesection] = useState('Dashboard')
+
+  
+  const [categories, setCategories] = useState([]);
+   const [form, setForm] = useState({
+    name: "",
+    price: 0,
+    description: "",
+    category_id: 0,
+    kitchen_id: 0,
+  });
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/food/categories/");
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const data = await response.json();
+        setCategories(Array.isArray(data) ? data : data.categories || []);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const [food , setfood] = useState([]);
+
+  useEffect(() => {
+    const fetchfood = async () =>{
+    try{
+      const response = await fetch("http://localhost:8000/food/");
+       if(!response.ok){
+        throw new Error("Failed to fetch food");
+       }
+       const data = await response.json();
+       setfood(Array.isArray(data) ? data : data.food || []);
+    }catch(error){
+      console.error(error);
+    }
+    }
+    fetchfood();
+
+       })
+
+
+
   return (
     <div className='min-h-screen w-screen bg-neutral-100 flex flex-col items-center justify-start'>
       <div className='h-[10vh] w-[98%] rounded-xl shadow-md bg-white flex items-center mt-[2vh]'>
+        <Link to="/"><div 
+        className='h-[60%] w-fit p-3 ml-[1vw] hover:text-red-600 cursor-pointer flex items-center justify-center bg-neutral-200 rounded-2xl'>
+          <h1 className='font-Quicksand text-sm'>Back</h1>
+        </div>
+        </Link>
   <div className="justify-center items-center w-fit h-[80%] gap-[1vw] flex ml-auto mr-auto">
     {["Dashboard", "Caisse", "Frais", "Paramètres"].map((item) => (
       <h1
@@ -262,48 +316,462 @@ const Dashboard = () => {
 </div>
 
       </section>
-      <section id='Paramètres' className={`h-[80vh] w-[98%] flex items-center justify-center gap-[3vw] ${
+      <section id='Paramètres' className={`h-[95vh] pb-20 w-[98%] overflow-y-scroll overflow-x-hidden mt-[3vh] flex flex-col items-start justify-start gap-[3vw] ${
         activesection === "Paramètres" ? "" : "hidden"
       }`}>
+        <div className='flex h-fit w-screen text-start'>
+          <h1 className='font-Quicksand text-2xl'>Paramètres de Category</h1>
+        </div>
+<div className='flex gap-[10vw] w-screen items-center justify-center'>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
+    <h2 class="text-white font-bold text-lg">Ajouter un Article au Menu</h2>
 
-<div class="flex flex-col items-center justify-center h-fit light ">
-  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-Quicksand text-gray-800 mb-4">Ajouter un produit</h2>
+    <div class="mt-4">
+        <label class="text-white" for="name">Nom d'Article</label>
+        <input placeholder="Nom" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" type="text" />
+    </div>
 
-    <form class="flex flex-col">
-      <input placeholder="Nom du produit" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" type="text" />
-      <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
-        <option value="product-1">Category</option>
-        <option value="product-2">Pizzas</option>
-        <option value="product-3">Tacos</option>
-      </select>
-      <textarea placeholder="Description du produit" class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" name="feedback"></textarea>
+    <div class="mt-4 flex flex-row space-x-2">
+        <div class="flex-1">
+            <label class="text-white" for="zip">Prix</label>
+            <input placeholder="Prix" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="zip" type="text" />
+        </div>
 
-      <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Submit</button>
-    </form>
-  </div>
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+        
+    </div>
+    <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Cuisine</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
 </div>
-<div class="flex flex-col items-center justify-center h-fit light">
-  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-Quicksand text-gray-800 mb-4">Effacer un Produit</h2>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand pb-[6vh]">
+    <h2 class="text-white font-bold text-lg">Effacer un Article du Menu</h2>
 
-    <form class="flex flex-col">
-      <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
-        <option value="product-1">Category</option>
-        <option value="product-2">Product 2</option>
-        <option value="product-3">Product 3</option>
-      </select>
-      <select class="bg-gray-100 text-gray-800 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" id="product">
-        <option value="product-1">Product 1</option>
-        <option value="product-2">Product 2</option>
-        <option value="product-3">Product 3</option>
-      </select>
+    <div class="mt-4 flex flex-col space-x-2">
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Category</option>
 
-      <button class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150" type="submit">Submit</button>
-    </form>
-  </div>
+            {categories.map((cat, index) => (
+             <option key={index} value={cat}>
+              {cat}
+            </option>
+              ))}
+            </select>
+            </div>
+        </div>
+
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Article</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Article</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
 </div>
+</div>
+<div className='flex h-fit w-screen text-start'>
+          <h1 className='font-Quicksand text-2xl'>Paramètres de Category</h1>
+        </div>
+<div className='flex gap-[10vw] w-screen items-center justify-center'>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
+    <h2 class="text-white font-bold text-lg">Ajouter un Article au Menu</h2>
 
+    <div class="mt-4">
+        <label class="text-white" for="name">Nom d'Article</label>
+        <input placeholder="Nom" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" type="text" />
+    </div>
+
+    <div class="mt-4 flex flex-row space-x-2">
+        <div class="flex-1">
+            <label class="text-white" for="zip">Prix</label>
+            <input placeholder="Prix" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="zip" type="text" />
+        </div>
+
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+        
+    </div>
+    <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Cuisine</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
+</div>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand pb-[6vh]">
+    <h2 class="text-white font-bold text-lg">Effacer un Article du Menu</h2>
+
+    <div class="mt-4 flex flex-col space-x-2">
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Category</option>
+
+            {categories.map((cat, index) => (
+             <option key={index} value={cat}>
+              {cat}
+            </option>
+              ))}
+            </select>
+            </div>
+        </div>
+
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Article</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Article</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
+</div>
+</div>
+<div className='flex h-fit w-screen text-start'>
+          <h1 className='font-Quicksand text-2xl'>Paramètres de Category</h1>
+        </div>
+<div className='flex gap-[10vw] w-screen items-center justify-center'>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
+    <h2 class="text-white font-bold text-lg">Ajouter un Article au Menu</h2>
+
+    <div class="mt-4">
+        <label class="text-white" for="name">Nom d'Article</label>
+        <input placeholder="Nom" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" type="text" />
+    </div>
+
+    <div class="mt-4 flex flex-row space-x-2">
+        <div class="flex-1">
+            <label class="text-white" for="zip">Prix</label>
+            <input placeholder="Prix" class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="zip" type="text" />
+        </div>
+
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+        
+    </div>
+    <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Cuisine</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Select a country</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
+</div>
+<div class="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand pb-[6vh]">
+    <h2 class="text-white font-bold text-lg">Effacer un Article du Menu</h2>
+
+    <div class="mt-4 flex flex-col space-x-2">
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Category</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Category</option>
+
+            {categories.map((cat, index) => (
+             <option key={index} value={cat}>
+              {cat}
+            </option>
+              ))}
+            </select>
+            </div>
+        </div>
+
+        <div class="flex flex-row space-x-2">
+            <div class="flex-1">
+                <label class="text-white" for="country">Article</label>
+                <select class="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" id="country">
+            <option value="">Article</option>
+
+            <optgroup label="Africa">
+                <option value="AF">Afghanistan</option>
+                <option value="DZ">Algeria</option>
+                <option value="AO">Angola</option>
+                ...
+                <option value="ZW">Zimbabwe</option>
+            </optgroup>
+
+            <optgroup label="Asia">
+                <option value="AM">Armenia</option>
+                <option value="AZ">Azerbaijan</option>
+                <option value="BH">Bahrain</option>
+                ...
+                <option value="YE">Yemen</option>
+            </optgroup>
+
+            <optgroup label="South America">
+                <option value="AR">Argentina</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                ...
+                <option value="VE">Venezuela</option>
+            </optgroup>
+
+            ...
+            </select>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4 flex justify-end">
+        <button class="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Submit</button>
+    </div>
+</div>
+</div>
       </section>
     </div>
   )
