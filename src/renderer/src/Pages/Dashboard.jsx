@@ -2,155 +2,302 @@ import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
 import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
+import { themeQuartz } from "ag-grid-community";
 import { Link } from 'react-router-dom';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const API_BASE = "http://localhost:8000";
 
 const Dashboard = () => {
-  const [message, setMessage] = useState("");
   const [activesection, setActivesection] = useState('Dashboard');
+  const [foods , setFoods] = useState([]);
+  const [categories , setCategories] = useState([]);
+  const [kitchens , setKitchens] = useState([]);
+  const [stats , setStats] = useState([]);
+  const [expenses , setExpenses] = useState(null);
+  const [message , setMessage] = useState(null);
   
-  const [categoryForm, setCategoryForm] = useState({ name: "", description: "" });
-  const [foodForm, setFoodForm] = useState({ name: "", price: "", description: "", category_id: "", kitchen_id: "" });
-  const [selectedCategoryToDelete, setSelectedCategoryToDelete] = useState("");
-  const [selectedFoodToDelete, setSelectedFoodToDelete] = useState("");
-  
-  const [categories, setCategories] = useState([]);
-  const [food, setFood] = useState([]);
-  const [kitchens, setKitchens] = useState([]);
-  const [orders, setOrders] = useState([]);
+  useEffect(() =>{
+    const fetchexpenses = async() =>{
+      try{
+        const response = fetch(`${API_BASE}/expenses/`);
+        const expense = await response.json();
+        setExpenses(expense)
+      }
+      catch(error){
+        console.log(error);
+        setMessage(`Error: ${error.message}`)
+      }
+    }
+    fetchexpenses();
+  },[])
 
-  ModuleRegistry.registerModules([AllCommunityModule]);
+  const [frais, setFrais] = useState("");
+
+const handlesubmitfrais = async (e) => {
+  e.preventDefault();
+  const fraisform = {
+    price: frais,
+  };
+  try {
+    const response = await fetch(`${API_BASE}/expenses/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fraisform),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // re-fetch after adding
+    fetchexpenses();
+  } catch (error) {
+    console.log(error);
+    setMessage(`Error: ${error.message}`);
+  }
+};
+
+const fetchexpenses = async () => {
+  try {
+    const response = await fetch(`${API_BASE}/expenses/`);
+    const data = await response.json();
+    setExpenses(data);
+  } catch (error) {
+    console.log(error);
+    setMessage(`Error: ${error.message}`);
+  }
+};
+
+useEffect(() => {
+  fetchexpenses();
+}, []);
 
   useEffect(() => {
+    const fetchKitchens = async() => {
+      try{
+      const response = await fetch(`${API_BASE}/kitchens/`)
+      const kitchen = await response.json();
+      setKitchens(kitchen);
+      }
+      catch(error){
+        console.log(error);
+        setMessage(`Error: ${error.message}`)
+      }
+      }
+      fetchKitchens();
+    }
+  )
+  useEffect(() => {
+      const fetchFoods = async() => {
+        try{
+          const response = await fetch(`${API_BASE}/food/`);
+          const Articles = await response.json();
+          setFoods(Articles);
+        }
+        catch(error){
+          console.log(error);
+          setMessage(`Error: ${error.message}`)
+        }
+      }
+      fetchFoods();
+  },[]);
+
+  useEffect(()=> {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/food/categories`)
+        const cat = await response.json();
+        setCategories(cat);
+        
+      }
+      catch(error){
+        console.log(error);
+        setMessage(`Error : ${error.message}`)
+      }
+    }
     fetchCategories();
-    fetchFood();
-    fetchKitchens();
-    fetchOrders();
-  }, []);
+  },[])
 
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/food/categories/`);
-      if (!response.ok) throw new Error("Failed to fetch categories");
-      const data = await response.json();
-      setCategories(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const fetchFood = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/food/`);
-      if (!response.ok) throw new Error("Failed to fetch food");
-      const data = await response.json();
-      setFood(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [name , setName] = useState(null);
+  const [price , setPrice] = useState(null);
+  const [description , setDescription] = useState(null);
+  const [category , setCategory] = useState(null);
+  const [kitchen , setKitchen] = useState(null);
 
-  const fetchKitchens = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/kitchens/`);
-      if (!response.ok) throw new Error("Failed to fetch kitchens");
-      const data = await response.json();
-      setKitchens(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/orders/`);
-      if (!response.ok) throw new Error("Failed to fetch orders");
-      const data = await response.json();
-      setOrders(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleAddCategory = async (e) => {
+  const handleSubmitFood = async (e) => {
     e.preventDefault();
-    setMessage("");
-    
+    const add = {
+      name,
+      price,
+      description,
+      category_id:category,
+      kitchen_id:kitchen
+    };
     try {
-      const response = await fetch(`${API_BASE}/food/categories/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: categoryForm.name, description: categoryForm.description || null })
-      });
-
-      if (!response.ok) throw new Error("Failed to add category");
-      
-      setMessage(`✅ Category added successfully!`);
-      setCategoryForm({ name: "", description: "" });
-      fetchCategories();
-    } catch (error) {
-      setMessage(`❌ Error: ${error.message}`);
+     fetch(`${API_BASE}/food/` , {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(add)
     }
+     )
+     .then(() =>{
+      console.log('Food added successfully')
+      setMessage('Food added successfully')
+     
+      setName("");
+     setPrice("");
+     setDescription("");
+     setCategory("");
+     }
+     )
+      
+    }
+    catch(error){
+      console.log(error);
+      setMessage(`Error: ${error.message}`)
+    }
+  }
+
+const [id, setId] = useState(""); 
+
+const handleDeleteFood = async (e) => {
+  e.preventDefault();
+
+  if (!id) {
+    setMessage("Please select a food to delete");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/food/?id=${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to delete food");
+    }
+
+    setMessage("Food deleted successfully");
+
+    // remove deleted food from state
+    setFoods((prevFoods) => prevFoods.filter((food) => food.id !== Number(id)));
+
+    // reset dropdown
+    setId("");
+
+  } catch (error) {
+    console.error("Error deleting food:", error);
+    setMessage(`Error: ${error.message}`);
+  }
+};
+
+
+const FOOD_CATEGORIES = [
+  { emoji: '🍕' },
+  { emoji: '🍔' },
+  { emoji: '🍜' },
+  { emoji: '🍣' },
+  {emoji: '🥗' },
+  { emoji: '🍰' },
+  {emoji: '☕' },
+  { emoji: '🍺' },
+  { emoji: '🍟' },
+  { emoji: '🌮' },
+  {emoji: '🥩' },
+  { emoji: '🍝' },
+  { emoji: '🍤' },
+  { emoji: '🍗' },
+  { emoji: '🥪' },
+  { emoji: '🍳' },
+  { emoji: '🍲' },
+  { emoji: '🥙' },
+  { emoji: '🍱' },
+  {emoji: '🧁' },
+  {emoji: '🥤' },
+  {emoji: '🍷' },
+  { emoji: '🍹' },
+  { emoji: '🧃' }
+];
+
+const [catName, setCatName] = useState("");
+const [icon, setIcon] = useState("");
+
+const handleSubmitCategory = async (e) => {
+  e.preventDefault();
+
+  const newCategory = {
+    name: catName,
+    icon: icon,   // required, can't be missing
   };
 
-  const handleDeleteCategory = async () => {
-    if (!selectedCategoryToDelete) return;
-    
-    try {
-      const response = await fetch(`${API_BASE}/food/categories/?id=${selectedCategoryToDelete}`, { method: "DELETE" });
-      if (!response.ok) throw new Error("Failed to delete category");
-      
-      setMessage(`✅ Category deleted successfully!`);
-      setSelectedCategoryToDelete("");
-      fetchCategories();
-    } catch (error) {
-      setMessage(`❌ Error: ${error.message}`);
+  try {
+    const response = await fetch(`${API_BASE}/food/categories/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newCategory),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || "Failed to create category");
     }
-  };
 
-  const handleAddFood = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    
-    try {
-      const response = await fetch(`${API_BASE}/food/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: foodForm.name,
-          price: parseFloat(foodForm.price),
-          description: foodForm.description || null,
-          category_id: parseInt(foodForm.category_id),
-          kitchen_id: parseInt(foodForm.kitchen_id)
-        })
-      });
+    const saved = await response.json();
+    setMessage("Category added successfully");
 
-      if (!response.ok) throw new Error("Failed to add food");
-      
-      setMessage(`✅ Food item added successfully!`);
-      setFoodForm({ name: "", price: "", description: "", category_id: "", kitchen_id: "" });
-      fetchFood();
-    } catch (error) {
-      setMessage(`❌ Error: ${error.message}`);
+    // update categories list
+    setCategories((prev) => [...prev, saved]);
+
+    // reset form
+    setCatName("");
+    setIcon("");
+  } catch (error) {
+    console.error("Error creating category:", error);
+    setMessage(`Error: ${error.message}`);
+  }
+};
+const [Catid , setCatid] = useState(null);
+const handledeletecategory = async (e) => {
+  e.preventDefault();
+
+  try{
+    fetch(`${API_BASE}/food/categories/?id=${Catid}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Catid),
+    }).then(() => {
+      setMessage("Category deleted successfully");
     }
-  };
+    )
+  }
+  catch(error){
+    console.log(error);
+    setMessage(`Error: ${error.message}`)
+  }
+}
 
-  const handleDeleteFood = async () => {
-    if (!selectedFoodToDelete) return;
-    
-    try {
-      const response = await fetch(`${API_BASE}/food/?id=${selectedFoodToDelete}`, { method: "DELETE" });
-      if (!response.ok) throw new Error("Failed to delete food");
-      
-      setMessage(`✅ Food item deleted successfully!`);
-      setSelectedFoodToDelete("");
-      fetchFood();
-    } catch (error) {
-      setMessage(`❌ Error: ${error.message}`);
+const [Commandes , setCommandes] = useState([]);
+
+useEffect(() => {
+  const fetchcommandes = async() => {
+    try{
+      const response = await fetch (`${API_BASE}/orders/`);
+      const commandes = await response.json();
+      setCommandes(commandes);
     }
-  };
+    catch(error){
+      console.log(error);
+      setMessage(`Error: ${error.message}`)
+    }
+  }
+  fetchcommandes();
+})
 
+ 
   const chartData = [
     { name: 'Lun', uv: 4000, pv: 2400 },
     { name: 'Mar', uv: 3000, pv: 1398 },
@@ -161,34 +308,44 @@ const Dashboard = () => {
     { name: 'Dim', uv: 3490, pv: 4300 }
   ];
 
-  const GridExample = () => {
-    const [rowData] = useState([
-      { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-      { make: "Ford", model: "F-Series", price: 33850, electric: false },
-      { make: "Toyota", model: "Corolla", price: 29600, electric: false }
-    ]);
+const GridExample = () => {
+  const [rowData, setRowData] = useState([]); // ✅ holds orders
+  const [colDefs] = useState([
+    { field: "id", headerName: "ID" },
+    { field: "ordered_at", headerName: "Ordered At" },
+    { field: "table_id", headerName: "Table" },
+    { field: "total_price", headerName: "Total Price" }
+  ]);
 
-    const [colDefs] = useState([
-      { field: "make" },
-      { field: "model" },
-      { field: "price" },
-      { field: "electric" }
-    ]);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/orders/`);
+        const data = await response.json();
+        console.log("Fetched orders:", data); // debug
+        setRowData(data); // ✅ update rowData
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
 
-    return (
-      <div style={{ width: "100%", height: "100%" }}>
-        <AgGridReact rowData={rowData} columnDefs={colDefs} defaultColDef={{ flex: 1 }} />
-      </div>
-    );
-  };
+    fetchOrders();
+  }, []);
 
   return (
+    <div style={{ width: "100%", height: "500px" }}>
+      <AgGridReact
+        rowData={rowData}       // ✅ use rowData state
+        columnDefs={colDefs}
+        defaultColDef={{ flex: 1, resizable: true }}
+        theme={themeQuartz}
+        style={{ height: "100%", width: "100%" }}
+      />
+    </div>
+  );
+};
+  return (
     <div className='min-h-screen w-screen bg-neutral-100 flex flex-col items-center justify-start'>
-      {message && (
-        <div className="fixed top-4 right-4 bg-white p-4 rounded-lg shadow-lg z-50">
-          <p className="font-Quicksand">{message}</p>
-        </div>
-      )}
       
       <div className='h-[10vh] w-[98%] rounded-xl shadow-md bg-white flex items-center mt-[2vh]'>
         <Link to='/'><div className='h-[60%] w-fit p-3 ml-[1vw] hover:text-red-600 cursor-pointer flex items-center justify-center bg-neutral-200 rounded-2xl'>
@@ -229,7 +386,7 @@ const Dashboard = () => {
                   <div className='h-[1vh] w-[1vw] bg-neutral-700'></div>
                   <h1 className='font-Quicksand text-sm text-neutral-500'>Frais:</h1>
                 </div>
-                <h1 className='font-Quicksand text-2xl font-semibold px-[1vw] mt-[3vh]'>20000,00 DA</h1>
+                <h1 className='font-Quicksand text-2xl font-semibold px-[1vw] mt-[3vh]'>{expenses || 0},00 DA</h1>
               </div>
               <div className='h-[15vh] w-[30%] flex flex-col bg-neutral-200 rounded-2xl shadow-md'>
                 <div className='flex items-center justify-start gap-[.5vw] mt-[1vh] mr-auto ml-[1vw]'>
@@ -243,7 +400,7 @@ const Dashboard = () => {
           
           <div className='h-full w-[38%] shadow-md flex flex-col bg-white ml-[1vw] mt-[2vh] mr-[1vw] rounded-2xl'>
             <h1 className='font-Quicksand text-md p-4'>Total des Commandes</h1>
-            <p className='font-Quicksand text-4xl font-semibold tracking-wider px-5'>{orders.length}</p>
+            <p className='font-Quicksand text-4xl font-semibold tracking-wider px-5'>{Commandes.length || 0}</p>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart width={500} height={300} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 <Tooltip />
@@ -273,6 +430,31 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
+      <section className={`h-[95vh] pb-20 w-[98%] overflow-y-scroll overflow-x-hidden mt-[3vh] flex flex-col items-center justify-center gap-[3vw] ${activesection === "Frais" ? "" : "hidden"}`}>
+        <div className="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
+            <h2 className="text-white font-bold text-lg">Entrer les frais</h2>
+             <form onSubmit={handlesubmitfrais}>
+            <div className="mt-4">
+              <label className="text-white">Frais</label>
+              <input 
+                onChange={(e) => setFrais(e.target.value)}
+                placeholder="Frais" 
+                className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
+                type="text"
+                
+              />
+            </div>
+           
+            <div className="mt-4 flex justify-end">
+              <button
+              type='submit'
+              className="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200">
+                Submit
+              </button>
+            </div>
+            </form>
+          </div>
+      </section>
 
       <section className={`h-[95vh] pb-20 w-[98%] overflow-y-scroll overflow-x-hidden mt-[3vh] flex flex-col items-start justify-start gap-[3vw] ${activesection === "Paramètres" ? "" : "hidden"}`}>
         <div className='flex h-fit w-screen text-start'>
@@ -282,60 +464,64 @@ const Dashboard = () => {
         <div className='flex gap-[10vw] w-screen items-center justify-center'>
           <div className="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
             <h2 className="text-white font-bold text-lg">Ajouter une Category au Menu</h2>
-            
+             <form onSubmit={handleSubmitCategory}>
             <div className="mt-4">
               <label className="text-white">Nom de Category</label>
               <input 
                 placeholder="Nom" 
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
                 type="text"
-                value={categoryForm.name}
-                onChange={(e) => setCategoryForm({...categoryForm, name: e.target.value})}
+                onChange={(e) => setCatName(e.target.value)}
               />
             </div>
             
             <div className="mt-4">
-              <label className="text-white">Description (optionnel)</label>
-              <input 
-                placeholder="Description" 
-                className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
-                type="text"
-                value={categoryForm.description}
-                onChange={(e) => setCategoryForm({...categoryForm, description: e.target.value})}
-              />
+              <label className="text-white">Icon</label>
+              <select 
+              onChange={(e) => setIcon(e.target.value)}
+              className='text-white'>
+                  {FOOD_CATEGORIES.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.emoji}
+                    </option>
+                  ))}
+                </select>
             </div>
             
             <div className="mt-4 flex justify-end">
-              <button onClick={handleAddCategory} className="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200">
+              <button
+              type='submit'
+              className="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200">
                 Submit
               </button>
             </div>
+            </form>
           </div>
 
           <div className="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand pb-[6vh]">
             <h2 className="text-white font-bold text-lg">Effacer une Category du Menu</h2>
-            
+            <form onSubmit={handledeletecategory}>
             <div className="mt-4">
               <label className="text-white">Category</label>
               <select 
+                onChange={(e) => setCatid(e.target.value)}
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
-                value={selectedCategoryToDelete}
-                onChange={(e) => setSelectedCategoryToDelete(e.target.value)}
               >
                 <option value="">Sélectionner une category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
+                {categories.map(cat => (
+                  <option className='bg-gray-800' value={cat.id} key={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
             
             <div className="mt-4 flex justify-end">
-              <button onClick={handleDeleteCategory} className="bg-white text-black rounded-md px-4 py-1 hover:bg-red-500 hover:text-white transition-all duration-200">
+              <button
+              type='submit'
+              className="bg-white text-black rounded-md px-4 py-1 hover:bg-red-500 hover:text-white transition-all duration-200">
                 Delete
               </button>
             </div>
+            </form>
           </div>
         </div>
 
@@ -346,15 +532,14 @@ const Dashboard = () => {
         <div className='flex gap-[10vw] w-screen items-center justify-center'>
           <div className="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand">
             <h2 className="text-white font-bold text-lg">Ajouter un Article au Menu</h2>
-            
+            <form onSubmit={handleSubmitFood}>
             <div className="mt-4">
               <label className="text-white">Nom d'Article</label>
               <input 
                 placeholder="Nom" 
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
                 type="text"
-                value={foodForm.name}
-                onChange={(e) => setFoodForm({...foodForm, name: e.target.value})}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             
@@ -365,8 +550,7 @@ const Dashboard = () => {
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
                 type="number"
                 step="0.01"
-                value={foodForm.price}
-                onChange={(e) => setFoodForm({...foodForm, price: e.target.value})}
+                onChange={(e) => setPrice(e.target.value)}
               />
             </div>
             
@@ -376,8 +560,7 @@ const Dashboard = () => {
                 placeholder="Description" 
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1" 
                 type="text"
-                value={foodForm.description}
-                onChange={(e) => setFoodForm({...foodForm, description: e.target.value})}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             
@@ -385,14 +568,10 @@ const Dashboard = () => {
               <label className="text-white">Category</label>
               <select 
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
-                value={foodForm.category_id}
-                onChange={(e) => setFoodForm({...foodForm, category_id: e.target.value})}
+                onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="">Sélectionner une category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
+                {categories.map(cat =>(
+                  <option value={cat.id} className='bg-gray-800'>{cat.name}</option>
                 ))}
               </select>
             </div>
@@ -401,49 +580,56 @@ const Dashboard = () => {
               <label className="text-white">Cuisine</label>
               <select 
                 className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
-                value={foodForm.kitchen_id}
-                onChange={(e) => setFoodForm({...foodForm, kitchen_id: e.target.value})}
+                onChange={(e) => setKitchen(e.target.value)}
+
               >
-                <option value="">Sélectionner une cuisine</option>
-                {kitchens.map((kitchen) => (
-                  <option key={kitchen.id} value={kitchen.id}>
-                    {kitchen.name}
+                {kitchens.map(kitchen =>(
+                  <option className='bg-gray-800' value={kitchen.id}>
+                     {kitchen.name}
                   </option>
                 ))}
+
               </select>
             </div>
             
             <div className="mt-4 flex justify-end">
-              <button onClick={handleAddFood} className="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200">
+              <button className="bg-white text-black rounded-md px-4 py-1 hover:bg-blue-500 hover:text-white transition-all duration-200">
                 Submit
               </button>
             </div>
+            </form>
           </div>
+          
 
           <div className="mt-4 h-fit w-[30vw] flex flex-col bg-gray-900 rounded-lg p-4 shadow-sm font-Quicksand pb-[6vh]">
             <h2 className="text-white font-bold text-lg">Effacer un Article du Menu</h2>
-            
-            <div className="mt-4">
-              <label className="text-white">Article</label>
-              <select 
-                className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
-                value={selectedFoodToDelete}
-                onChange={(e) => setSelectedFoodToDelete(e.target.value)}
-              >
-                <option value="">Sélectionner un article</option>
-                {food.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name} - {item.price} DA
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="mt-4 flex justify-end">
-              <button onClick={handleDeleteFood} className="bg-white text-black rounded-md px-4 py-1 hover:bg-red-500 hover:text-white transition-all duration-200">
-                Delete
-              </button>
-            </div>
+            <form onSubmit={handleDeleteFood}>
+  <div className="mt-4">
+    <label className="text-white">Article</label>
+    <select
+      value={id}
+      onChange={(e) => setId(e.target.value)}
+      className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+    >
+      <option value="">Select a food</option>
+      {foods.map((food) => (
+        <option className="bg-gray-800" value={food.id} key={food.id}>
+          {food.name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="mt-4 flex justify-end">
+    <button
+      type="submit"
+      className="bg-white text-black rounded-md px-4 py-1 hover:bg-red-500 hover:text-white transition-all duration-200"
+    >
+      Delete
+    </button>
+  </div>
+</form>
+
           </div>
         </div>
       </section>
