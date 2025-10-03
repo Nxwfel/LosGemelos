@@ -3,7 +3,6 @@ import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()]
@@ -12,11 +11,12 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
+    base: './', // ✅ relative paths so CSS/JS load correctly in packaged app
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [react(),tailwindcss()]
+    plugins: [react(), tailwindcss()]
   }
 })

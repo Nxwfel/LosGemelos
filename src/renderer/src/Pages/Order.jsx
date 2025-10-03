@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 import {Link} from 'react-router-dom'
-
 // Update this with your actual API URL
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -11,21 +10,27 @@ const Order = () => {
   const [foodItems, setFoodItems] = useState([]);
   const [tables, setTables] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
-  const [currentOrder, setCurrentOrder] = useState(null);
   const [selectedTable, setSelectedTable] = useState('');
   const [hidden, setHidden] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [foodOptions, setFoodOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
-  // Fetch data on component mount
   useEffect(() => {
     fetchCategories();
     fetchFoodItems();
     fetchTables();
   }, []);
 
-  // API Functions
+  // Fetch options when food is selected
+  useEffect(() => {
+    if (selectedFood) {
+      fetchFoodOptions(selectedFood.id);
+    }
+  }, [selectedFood]);
+
   const fetchCategories = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/food/categories/`);
@@ -59,67 +64,105 @@ const Order = () => {
     }
   };
 
-  const createOrder = async (tableId) => {
+  const fetchFoodOptions = async (foodId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/orders/?table_id=${tableId}`, {
-        method: 'POST',
-      });
+      const response = await fetch(`${API_BASE_URL}/food/options/?food_id=${foodId}`);
       const data = await response.json();
-      setCurrentOrder(data);
-      return data;
+      setFoodOptions(data);
     } catch (error) {
-      console.error('Error creating order:', error);
-      return null;
+      console.error('Error fetching food options:', error);
+      setFoodOptions([]);
     }
   };
 
-  const addFoodToOrder = async (foodId, optionId = null) => {
-    try {
-      let order = currentOrder;
-      
-      if (!order && selectedTable) {
-        order = await createOrder(parseInt(selectedTable));
-      }
-      
-      if (!order) {
-        alert('Please select a table first');
-        return;
-      }
+  const addFoodToOrder = () => {
+    if (!selectedFood) return;
 
-      const response = await fetch(`${API_BASE_URL}/orders/food/`, {
+    // Create order item with all necessary information
+    const newItem = {
+      food_id: selectedFood.id,
+      name: selectedFood.name,
+      price: selectedFood.price,
+      quantity: quantity,
+      option_ids: selectedOptions,
+      tempId: Date.now(), // Temporary ID for frontend tracking
+      options: selectedOptions.map(optId => 
+        foodOptions.find(opt => opt.id === optId)
+      ).filter(Boolean)
+    };
+
+    setOrderItems([...orderItems, newItem]);
+    setHidden(false);
+    setQuantity(1);
+    setSelectedFood(null);
+    setSelectedOptions([]);
+    setFoodOptions([]);
+  };
+
+  const removeFoodFromOrder = (tempId) => {
+    setOrderItems(orderItems.filter(item => item.tempId !== tempId));
+  };
+
+  const handleSendToKitchen = async () => {
+    if (!selectedTable) {
+      alert('Please select a table');
+      return;
+    }
+    
+    if (orderItems.length === 0) {
+      alert('Please add items to the order');
+      return;
+    }
+
+    try {
+      // Prepare the order payload according to your API spec
+      // POST /orders/ expects: { table_id: int, food: [{ food_id: int, quantity: int, option_ids: [int] }] }
+      const orderPayload = {
+        table_id: parseInt(selectedTable),
+        food: orderItems.map(item => ({
+          food_id: item.food_id,
+          quantity: item.quantity,
+          option_ids: item.option_ids
+        }))
+      };
+
+      console.log('Sending order to kitchen:', orderPayload);
+
+      const response = await fetch(`${API_BASE_URL}/orders/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          order_id: order.id,
-          food_id: foodId,
-          option_id: optionId,
-        }),
+        body: JSON.stringify(orderPayload)
       });
 
       if (response.ok) {
-        const foodItem = foodItems.find(f => f.id === foodId);
-        const newItem = { ...foodItem, quantity, orderFoodId: Date.now() };
-        setOrderItems([...orderItems, newItem]);
-        setHidden(false);
-        setQuantity(1);
-        setSelectedFood(null);
+        const result = await response.json();
+        console.log('Order created successfully:', result);
+        
+        const tableName = tables.find(t => t.id === parseInt(selectedTable))?.name;
+        alert(`✅ Order sent to kitchen for ${tableName}!`);
+        
+        // Reset the form after successful order
+        setOrderItems([]);
+        setSelectedTable('');
+      } else {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        
+        // Display more detailed error information
+        if (errorData.detail && Array.isArray(errorData.detail)) {
+          const errorMessages = errorData.detail.map(err => 
+            `Field: ${err.loc.join('.')} - ${err.msg}`
+          ).join('\n');
+          alert(`❌ Failed to send order:\n${errorMessages}`);
+        } else {
+          alert('❌ Failed to send order. Please check the console for details.');
+        }
       }
     } catch (error) {
-      console.error('Error adding food to order:', error);
-    }
-  };
-
-  const removeFoodFromOrder = async (orderFoodId, itemId) => {
-    try {
-      await fetch(`${API_BASE_URL}/orders/food/?id=${itemId}`, {
-        method: 'DELETE',
-      });
-      setOrderItems(orderItems.filter(item => item.orderFoodId !== orderFoodId));
-    } catch (error) {
-      console.error('Error removing food from order:', error);
-      setOrderItems(orderItems.filter(item => item.orderFoodId !== orderFoodId));
+      console.error('Network error:', error);
+      alert('❌ Network error. Failed to send order to kitchen. Please try again.');
     }
   };
 
@@ -130,7 +173,16 @@ const Order = () => {
   const handleFoodClick = (food) => {
     setSelectedFood(food);
     setQuantity(1);
+    setSelectedOptions([]);
     setHidden(true);
+  };
+
+  const toggleOption = (optionId) => {
+    setSelectedOptions(prev => 
+      prev.includes(optionId) 
+        ? prev.filter(id => id !== optionId)
+        : [...prev, optionId]
+    );
   };
 
   const getCategoryFoodItems = () => {
@@ -146,27 +198,23 @@ const Order = () => {
     return items;
   };
 
-  const calculateTotal = () => {
-    return orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const calculateItemTotal = (item) => {
+    let total = item.price * item.quantity;
+    
+    // Add option prices
+    if (item.options && item.options.length > 0) {
+      item.options.forEach(option => {
+        if (option) {
+          total = option.price * item.quantity;
+        }
+      });
+    }
+    
+    return total;
   };
 
-  const handleSendToKitchen = async () => {
-    if (!selectedTable) {
-      alert('Please select a table');
-      return;
-    }
-    
-    if (orderItems.length === 0) {
-      alert('Please add items to the order');
-      return;
-    }
-
-    const tableName = tables.find(t => t.id === parseInt(selectedTable))?.name;
-    alert(`Order sent to kitchen for ${tableName}`);
-    
-    setOrderItems([]);
-    setCurrentOrder(null);
-    setSelectedTable('');
+  const calculateTotal = () => {
+    return orderItems.reduce((total, item) => total + calculateItemTotal(item), 0);
   };
 
   const renderFoodItems = () => {
@@ -194,7 +242,7 @@ const Order = () => {
                 className='h-[15vh] w-[25vw] bg-white shadow-xl cursor-pointer rounded-2xl items-center justify-start flex'
               >
                 <div className='size-[13vh] rounded-2xl ml-[.5vw] bg-orange-200 flex items-center justify-center'>
-                  <span className='text-2xl'>🍽️</span>
+                  <span className='text-2xl'>{food.icon || '🍽️'}</span>
                 </div>
                 <div className='flex flex-col ml-[1vw]'>
                   <h1 className='font-sans text-md'>{food.name}</h1>
@@ -213,28 +261,56 @@ const Order = () => {
 
   return (
     <div className='h-screen w-screen overflow-hidden bg-[#fdfbfb] flex'>
-      <div className={`${hidden ? '' : 'hidden'} absolute ml-[40vw] mt-[30vh] h-[40vh] w-[20vw] bg-white justify-center text-center items-center drop-shadow-2xl rounded-xl z-50`}>
-        <div className='h-4 w-full'>
-          <p onClick={() => { setHidden(false); setQuantity(1); }} className='px-3 bg-amber-200 cursor-pointer text-white'>x</p>
+      {/* Food Selection Modal */}
+      <div className={`${hidden ? '' : 'hidden'} absolute ml-[40vw] mt-[20vh] h-fit max-h-[60vh] w-[20vw] bg-white justify-center text-center items-center drop-shadow-2xl rounded-xl z-50 overflow-y-auto`}>
+        <div className='h-4 w-full sticky top-0 bg-white z-10'>
+          <p onClick={() => { setHidden(false); setQuantity(1); setSelectedOptions([]); }} className='px-3 bg-amber-200 cursor-pointer text-white'>x</p>
         </div>
         <div className='h-[15vh] w-full rounded-2xl items-center justify-center flex'>
           <div className='flex flex-col items-center'>
-            <h1 className='font-sans text-md'>{selectedFood?.name}</h1>
+            <h1 className='font-sans text-md font-bold'>{selectedFood?.name}</h1>
             <h2 className='font-sans text-sm text-neutral-400'>{selectedFood?.description}</h2>
             <h3 className='font-sans text-lg font-bold mt-[1vh]'>{selectedFood?.price} DA</h3>
           </div>
         </div>
+
+        {/* Options Section */}
+        {foodOptions.length > 0 && (
+          <div className='px-4 mb-4'>
+            <h2 className='font-sans text-md font-semibold mb-2'>Options</h2>
+            <div className='flex flex-col gap-2'>
+              {foodOptions.map(option => (
+                <div 
+                  key={option.id}
+                  onClick={() => toggleOption(option.id)}
+                  className={`p-2 rounded-lg cursor-pointer border-2 transition-all ${
+                    selectedOptions.includes(option.id) 
+                      ? 'border-emerald-400 bg-emerald-50' 
+                      : 'border-gray-200 bg-white'
+                  }`}
+                >
+                  <div className='flex justify-between items-center'>
+                    <span className='font-sans text-sm'>{option.extra_name}</span>
+                    <span className='font-sans text-sm font-semibold'>+{option.price} DA</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <h1 className='font-sans text-black mb-[1vh]'>Quantity</h1>
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center mb-4'>
           <p onClick={() => setQuantity(q => q + 1)} className='font-sans text-md text-black bg-emerald-200 px-2 rounded-2xl cursor-pointer'>+</p>
           <p className='font-sans text-md text-black mx-2'>{quantity}</p>
           <p onClick={() => setQuantity(q => Math.max(1, q - 1))} className='font-sans text-md text-black bg-amber-200 px-2 rounded-2xl cursor-pointer'>-</p>
         </div>
-        <button onClick={() => selectedFood && addFoodToOrder(selectedFood.id)} className="inline-block mt-[5vh] font-sans cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl">
+        <button onClick={addFoodToOrder} className="inline-block mb-4 font-sans cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl">
           Ajouter au order
         </button>
       </div>
 
+      {/* Sidebar */}
       <div className='h-[97%] w-[8vw] mt-[1vh] bg-white border-1 border-neutral-300 rounded-3xl ml-[1vw] flex flex-col items-center justify-items-center-safe gap-[20vh] mr-auto shadow-xl'>
         <h1 className='font-serif text-5xl bg-white text-[#dba840] mt-[3vh]'>L</h1>
         <div className='flex flex-col items-center justify-center gap-[5vh] mt-[7vh]'>
@@ -245,7 +321,7 @@ const Order = () => {
             <h1 className='font-sans text-[2vh]'>Acceuil</h1>
           </div></Link>
           
-          <Link to='/order'><div className='flex flex-col h-[8.5vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white fill-[#c4c1c3] hover:fill-white p-2'>
+          <Link to='/order'><div className='flex flex-col h-[8.5vh] w-[4vw] bg-[#dba840] rounded justify-center items-center text-white fill-white p-2'>
             <svg xmlns="http://www.w3.org/2000/svg" className='size-[4vh]' viewBox="0 0 64 64">
               <g fillRule="evenodd">
                 <path d="M61.821 11.045c.703-1.309-.891-.912-.891-.912s-10.627 10.201-12.104 8.951S59.231 8.057 57.825 6.23c-1.301-1.703-11.74 10.455-12.994 8.97c-1.242-1.482 8.939-12.123 8.939-12.123s.387-1.602-.912-.9C36.851 10.785 34.812 18.81 34.812 18.81s-.551 1.563.645 2.771c.117.105-29.204 29.26-33.129 33.196c-1.91 1.908 5.098 8.801 6.996 6.893c3.926-3.936 33.024-33.303 33.129-33.194c1.207 1.205 2.766.652 2.766.652s8.012-2.045 16.602-18.083"/>
@@ -263,6 +339,7 @@ const Order = () => {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className='h-screen w-[92vw] flex flex-col'>
         <div className='h-[10vh] w-[55vw] mt-[4vh] ml-[3vw] flex items-center justify-between'>
           <h1 className='font-sans font-normal text-[3vh] text-nowrap'>Choisissez la catégorie</h1>
@@ -290,7 +367,7 @@ const Order = () => {
               }`}
               onClick={() => handleCategoryClick(category.id)}
             >
-              <span className='text-4xl'>🍽️</span>
+              <span className='text-4xl'>{category.icon || '🍽️'}</span>
               <h1 className='font-sans font-medium text-[1.5vh]'>{category.name}</h1>
             </div>
           ))}
@@ -301,22 +378,30 @@ const Order = () => {
         </div>
       </div>
 
+      {/* Order Panel */}
       <div className='h-[90vh] w-[40vw] bg-white shadow-xl p-4 rounded-2xl mt-[5vh] mr-[1vw]'>
         <h1 className='font-sans text-xl font-bold'>Command</h1>
         <div className='flex flex-col h-[75vh] mt-[2vh] overflow-scroll gap-[1vh]'>
-          {orderItems.map((item, index) => (
-            <div key={item.orderFoodId} className='h-[13vh] w-[25vw] rounded-2xl items-center justify-start flex relative'>
-              <div className='size-[11vh] rounded-2xl ml-[.5vw] bg-orange-200 flex items-center justify-center'>
-                <span className='text-2xl'>🍽️</span>
+          {orderItems.map((item) => (
+            <div key={item.tempId} className='h-fit w-[25vw] rounded-2xl items-start justify-start flex relative p-2 bg-gray-50'>
+              <div className='size-[11vh] rounded-2xl bg-orange-200 flex items-center justify-center shrink-0'>
+                <span className='text-2xl'>{item.icon || '🍽️'}</span>
               </div>
-              <div className='flex flex-col ml-[1vw]'>
-                <h1 className='font-sans text-md'>{item.name}</h1>
-                <h3 className='font-sans text-lg font-bold mt-[1vh]'>{item.price} DA</h3>
+              <div className='flex flex-col ml-[1vw] flex-1'>
+                <h1 className='font-sans text-md font-semibold'>{item.name}</h1>
+                {item.options && item.options.length > 0 && (
+                  <div className='text-xs text-neutral-600 mt-1'>
+                    {item.options.map((opt, idx) => (
+                      <div key={idx}>+ {opt.extra_name} (+{opt.price} DA)</div>
+                    ))}
+                  </div>
+                )}
+                <h3 className='font-sans text-lg font-bold mt-[1vh]'>{calculateItemTotal(item)} DA</h3>
               </div>
-              <div className='flex flex-col items-center justify-center ml-auto gap-[1vh]'>
+              <div className='flex flex-col items-center justify-center gap-[1vh]'>
                 <h1 className='text-md font-sans'>x{item.quantity}</h1>
                 <button 
-                  onClick={() => removeFoodFromOrder(item.orderFoodId, item.id)}
+                  onClick={() => removeFoodFromOrder(item.tempId)}
                   className='text-xs bg-red-200 px-2 py-1 rounded cursor-pointer hover:bg-red-300'
                 >
                   Remove
@@ -325,9 +410,9 @@ const Order = () => {
             </div>
           ))}
           
-          <div className='flex justify-between border-t-1 items-center mt-[2vh]'>
-            <h1 className='font-sans text-lg ml-[1vw]'>Total</h1>
-            <p className='font-sans text-sm mt-[1vh]'>{calculateTotal()} DA</p>
+          <div className='flex justify-between border-t-2 items-center mt-[2vh] pt-2'>
+            <h1 className='font-sans text-lg ml-[1vw] font-bold'>Total</h1>
+            <p className='font-sans text-xl font-bold'>{calculateTotal()} DA</p>
           </div>
           
           <div className='h-fit flex flex-col gap-[2vh] justify-center items-center mt-[3vh]'>
@@ -349,7 +434,8 @@ const Order = () => {
             </div>
             <button 
               onClick={handleSendToKitchen}
-              className="inline-block font-sans cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl"
+              disabled={!selectedTable || orderItems.length === 0}
+              className="inline-block font-sans cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none"
             >
               Vers la cuisine
             </button>

@@ -1,73 +1,177 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+"use strict";
+const { app, BrowserWindow, shell, ipcMain } = require("electron");
+const { spawn } = require("child_process");
+const utils = require("@electron-toolkit/utils");
+const path = require("path");
+const fs = require("fs");
 
+app.commandLine.appendSwitch("disable-http-cache");
+app.commandLine.appendSwitch("disk-cache-size", "0");
+
+let backendProcess;
+
+/**
+ * Create main Electron window
+ */
 function createWindow() {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
-  })
+      preload: path.join(__dirname, "../preload/index.js"),
+      sandbox: false,
+    },
+  });
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
+  mainWindow.on("ready-to-show", () => mainWindow.show());
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
+    shell.openExternal(details.url);
+    return { action: "deny" };
+  });
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  // DEBUG: DevTools
+  mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.on("did-fail-load", (_, errorCode, errorDescription) => {
+    console.error("Failed to load:", errorCode, errorDescription);
+  });
+
+  mainWindow.webContents.on("did-finish-load", () => {
+    console.log("✅ Page loaded successfully");
+  });
+
+  mainWindow.webContents.on("console-message", (event, level, message) => {
+    console.log(`Renderer log [${level}]:`, message);
+  });
+
+  if (utils.is.dev && process.env["ELECTRON_RENDERER_URL"]) {
+    console.log("Loading dev URL:", process.env["ELECTRON_RENDERER_URL"]);
+    mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    const rendererPath = path.join(__dirname, "../renderer/index.html");
+    console.log("Loading production file:", rendererPath);
+    console.log("File exists:", fs.existsSync(rendererPath));
+    mainWindow.loadFile(rendererPath);
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
-
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-
-  createWindow()
-
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+/**
+ * Check backend readiness
+ */
+async function checkBackendReady(port = 8000, maxRetries = 30) {
+  const http = require("http");
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await new Promise((resolve, reject) => {
+        const req = http.get(`http://localhost:${port}/tables/`, (res) => {
+          resolve(true); // Any response means backend is up
+        });
+        req.on("error", reject);
+        req.setTimeout(1000, () => {
+          req.destroy();
+          reject();
+        });
+      });
+      console.log("✅ Backend is ready!");
+      return true;
+    } catch {
+      console.log(`⏳ Waiting for backend... (${i + 1}/${maxRetries})`);
+      await new Promise((r) => setTimeout(r, 1000));
+    }
   }
-})
+  console.error("❌ Backend failed to start in time");
+  return false;
+}
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+/**
+ * Start backend process
+ */
+async function startBackendAndApp() {
+  const backendExe = utils.is.dev
+    ? path.join(__dirname, "../../Restaurant-System1/app/dist/backend.exe")
+    : path.join(process.resourcesPath, "backend.exe");
+
+  console.log("Backend path:", backendExe);
+  if (!fs.existsSync(backendExe)) {
+    console.error("❌ Backend executable not found!");
+    createWindow();
+    return;
+  }
+
+  try {
+    backendProcess = spawn(backendExe, [], {
+      detached: true,
+      stdio: "pipe", // ✅ keeps stdout/stderr available
+      env: {
+        ...process.env,
+        SECRET_KEY: "supersecret",
+        DATABASE_URL: "sqlite:///./data.db",
+      },
+    });
+
+    backendProcess.stdout?.on("data", (data) =>
+      console.log("Backend stdout:", data.toString())
+    );
+    backendProcess.stderr?.on("data", (data) =>
+      console.error("Backend stderr:", data.toString())
+    );
+    backendProcess.on("error", (err) =>
+      console.error("Backend process error:", err)
+    );
+    backendProcess.on("exit", (code) =>
+      console.log("Backend process exited with code:", code)
+    );
+
+    console.log("🚀 Backend process started, waiting for it...");
+
+    const ready = await checkBackendReady(8000);
+    if (ready) {
+      console.log("✅ Backend ready, creating window...");
+    } else {
+      console.warn("⚠️ Backend not ready, creating window anyway...");
+    }
+    createWindow();
+  } catch (err) {
+    console.error("❌ Failed to start backend:", err);
+    createWindow();
+  }
+}
+
+/**
+ * App lifecycle
+ */
+app.whenReady().then(() => {
+  utils.electronApp.setAppUserModelId("com.electron");
+
+  app.on("browser-window-created", (_, window) => {
+    utils.optimizer.watchWindowShortcuts(window);
+  });
+
+  ipcMain.on("ping", () => console.log("pong"));
+
+  startBackendAndApp();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+app.on("before-quit", () => {
+  if (backendProcess) {
+    try {
+      backendProcess.kill();
+      console.log("🛑 Backend killed on exit");
+    } catch (err) {
+      console.error("Error killing backend:", err);
+    }
+  }
+});
