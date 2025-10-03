@@ -682,7 +682,7 @@ const mostExpensive = getMostExpensiveOrder(orders);
       </div>
     </div>
         </div>
-        <div className='h-fit w-[28%] bg-white rounded-xl shadow-xl ml-[2vw] flex flex-col p-5'>
+        <div className='h-fit w-[28%] bg-white rounded-xl shadow-2xl ml-[2vw] flex flex-col p-5'>
           <h1 className='font-Quicksand text-3xl'>Total des Commandes</h1>
           <p className='font-Quicksand ml-[2vw] mt-[2vh] text-7xl'>{Commandes.length || 0}</p>
           <h1 className='font-Quicksand text-2xl mt-[4vh]'>Commandes plus chères</h1>
