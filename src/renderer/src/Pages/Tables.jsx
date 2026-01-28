@@ -35,83 +35,70 @@ const Tables = () => {
       console.error('Error fetching orders:', error);
     }
   };
-const handleTableClick = async (table) => {
-  setSelectedTable(table);
-  setLoading(true);
-  
-  try {
-    // Fetch orders and food data in parallel
-    const [ordersResponse, foodResponse] = await Promise.all([
-      fetch(`${API_BASE_URL}/orders/`),
-      fetch(`${API_BASE_URL}/food/`)
-    ]);
+
+  const handleTableClick = async (table) => {
+    setSelectedTable(table);
+    setLoading(true);
     
-    const allOrders = await ordersResponse.json();
-    const allFoods = await foodResponse.json();
-    
-    console.log('Raw orders from API:', allOrders);
-    console.log('All foods:', allFoods);
-    
-    // Filter orders for the selected table
-    const filteredOrders = allOrders.filter(order => order.table_id === table.id);
-    
-    // Enrich orders with full food details
-    const enrichedOrders = await Promise.all(
-      filteredOrders.map(async (order) => {
-        // Handle both 'food_items' and 'food' field names
-        const foodItems = order.food_items || order.food || [];
-        
-        const enrichedFoodItems = await Promise.all(
-          foodItems.map(async (item) => {
-            // Find the full food details
-            const foodDetails = allFoods.find(food => food.id === item.food_id);
-            
-            if (!foodDetails) {
-              console.log('Food not found for food_id:', item.food_id);
-              return null;
-            }
-            
-            // Fetch options if option_ids exist
-            let options = [];
-            if (item.option_ids && item.option_ids.length > 0) {
-              try {
-                const optionsResponse = await fetch(`${API_BASE_URL}/food/options/?food_id=${item.food_id}`);
-                const allOptions = await optionsResponse.json();
-                
-                // Filter to only the selected options
-                options = allOptions.filter(opt => item.option_ids.includes(opt.id));
-              } catch (error) {
-                console.error('Error fetching options:', error);
+    try {
+      const [ordersResponse, foodResponse] = await Promise.all([
+        fetch(`${API_BASE_URL}/orders/`),
+        fetch(`${API_BASE_URL}/food/`)
+      ]);
+      
+      const allOrders = await ordersResponse.json();
+      const allFoods = await foodResponse.json();
+      
+      const filteredOrders = allOrders.filter(order => order.table_id === table.id);
+      
+      const enrichedOrders = await Promise.all(
+        filteredOrders.map(async (order) => {
+          const foodItems = order.food_items || order.food || [];
+          
+          const enrichedFoodItems = await Promise.all(
+            foodItems.map(async (item) => {
+              const foodDetails = allFoods.find(food => food.id === item.food_id);
+              
+              if (!foodDetails) {
+                return null;
               }
-            }
-            
-            return {
-              ...foodDetails,
-              quantity: item.quantity,
-              options: options,
-              order_food_id: item.id || item.food_id // Make sure we have an ID for deletion
-            };
-          })
-        );
-        
-        return {
-          ...order,
-          food_items: enrichedFoodItems.filter(item => item !== null)
-        };
-      })
-    );
-    
-    console.log('Enriched orders:', enrichedOrders);
-    console.log('First enriched order food_items:', enrichedOrders[0]?.food_items);
-    setTableOrders(enrichedOrders);
-    setHidden(true);
-  } catch (error) {
-    console.error('Error fetching table orders:', error);
-    setTableOrders([]);
-  } finally {
-    setLoading(false);
-  }
-};
+              
+              let options = [];
+              if (item.option_ids && item.option_ids.length > 0) {
+                try {
+                  const optionsResponse = await fetch(`${API_BASE_URL}/food/options/?food_id=${item.food_id}`);
+                  const allOptions = await optionsResponse.json();
+                  options = allOptions.filter(opt => item.option_ids.includes(opt.id));
+                } catch (error) {
+                  console.error('Error fetching options:', error);
+                }
+              }
+              
+              return {
+                ...foodDetails,
+                quantity: item.quantity,
+                options: options,
+                order_food_id: item.id || item.food_id
+              };
+            })
+          );
+          
+          return {
+            ...order,
+            food_items: enrichedFoodItems.filter(item => item !== null)
+          };
+        })
+      );
+      
+      setTableOrders(enrichedOrders);
+      setHidden(true);
+    } catch (error) {
+      console.error('Error fetching table orders:', error);
+      setTableOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const calculateTableTotal = () => {
     let total = 0;
@@ -119,7 +106,6 @@ const handleTableClick = async (table) => {
       if (order.food_items) {
         order.food_items.forEach(item => {
           total += (item.price || 0) * (item.quantity || 1);
-          // Add options prices if available
           if (item.options) {
             item.options.forEach(option => {
               total += (option.price || 0) * (item.quantity || 1);
@@ -137,7 +123,6 @@ const handleTableClick = async (table) => {
       return;
     }
 
-    // Create printable content
     const ticketContent = `
 ========================================
         RESTAURANT TICKET
@@ -160,8 +145,6 @@ TOTAL: ${calculateTableTotal()} DA
 ========================================
     `;
 
-    // In a real app, you'd integrate with a printer API
-    // For now, we'll open a print dialog
     const printWindow = window.open('', '', 'width=300,height=600');
     printWindow.document.write(`
       <html>
@@ -180,21 +163,15 @@ TOTAL: ${calculateTableTotal()} DA
     `);
     printWindow.document.close();
 
-    // Delete all orders for this table
     try {
-      console.log('Deleting orders:', tableOrders.map(o => o.id));
-      
       let successCount = 0;
       let failCount = 0;
 
-      // Delete each entire order by order ID
       for (const order of tableOrders) {
         try {
           const response = await fetch(`${API_BASE_URL}/orders/food/?id=${order.id}`, {
             method: 'DELETE',
           });
-          
-          console.log(`Delete response for order ${order.id}:`, response.status, response.ok);
           
           if (response.ok) {
             successCount++;
@@ -209,9 +186,6 @@ TOTAL: ${calculateTableTotal()} DA
         }
       }
 
-      console.log(`Deletion complete: ${successCount} orders deleted, ${failCount} failed`);
-
-      // Refresh the data
       await fetchOrders();
       setTableOrders([]);
       setHidden(false);
@@ -223,15 +197,14 @@ TOTAL: ${calculateTableTotal()} DA
     }
   };
 
-  const handleRemoveOrderItem = async (orderFoodId) => {
+  const handleRemoveOrderItem = async (orderFoodId, foodId) => {
     try {
       const response = await fetch(
-  `${API_BASE_URL}/orders/food/?order_id=${orderFoodId}&food_id=${foodItem.food_id}`,
-  { method: 'DELETE' }
-);
+        `${API_BASE_URL}/orders/food/?order_id=${orderFoodId}&food_id=${foodId}`,
+        { method: 'DELETE' }
+      );
 
       if (response.ok) {
-        // Refresh table orders
         handleTableClick(selectedTable);
         alert('Item removed successfully');
       } else {
@@ -245,60 +218,58 @@ TOTAL: ${calculateTableTotal()} DA
  
   const getTableStatus = (tableId) => {
     const hasOrders = orders.some(order => order.table_id === tableId);
-    return hasOrders ? 'bg-emerald-100 border-emerald-300' : 'bg-neutral-100 border-neutral-300';
+    return hasOrders ? 'bg-emerald-400' : 'bg-[#2d2d2d]';
   };
 
   return (
-    <div className='h-screen w-screen overflow-hidden bg-[#fdfbfb] flex'>
+    <div className='h-screen w-screen overflow-hidden bg-[#111315] flex'>
       {/* Order Details Modal */}
-      <div className={`${hidden ? '' : 'hidden'} absolute h-[80vh] w-[40vw] ml-[30vw] mt-[10vh] bg-white rounded-2xl shadow-2xl justify-center items-center text-center z-50`}>
-        <p 
-          onClick={() => setHidden(false)}
-          className='h-[4vh] w-full bg-amber-200 text-white text-lg cursor-pointer rounded-t-2xl'
-        >
-          x
-        </p>
-        <h1 className='font-sans text-2xl mt-[3vh] font-bold'>
+      <div className={`${hidden ? '' : 'hidden'} absolute ml-[30vw] mt-[10vh] h-fit max-h-[80vh] w-[40vw] bg-white justify-center text-center items-center drop-shadow-2xl rounded-xl z-50 overflow-y-auto`}>
+        <div className='h-4 w-full sticky top-0 bg-white z-10'>
+          <p 
+            onClick={() => setHidden(false)}
+            className='px-3 bg-amber-200 cursor-pointer text-white'
+          >
+            x
+          </p>
+        </div>
+        
+        <h1 className='Anybody text-2xl mt-[3vh] font-bold text-black'>
           {selectedTable?.name || 'Table'}
         </h1>
         
         {loading ? (
-          <div className='mt-[10vh]'>
-            <p className='font-sans text-neutral-400'>Loading orders...</p>
+          <div className='mt-[10vh] mb-[3vh]'>
+            <p className='Anybody text-neutral-400'>Loading orders...</p>
           </div>
         ) : tableOrders.length === 0 ? (
-          <div className='mt-[10vh]'>
-            <p className='font-sans text-neutral-400'>No orders for this table</p>
+          <div className='mt-[10vh] mb-[3vh]'>
+            <p className='Anybody text-neutral-400'>No orders for this table</p>
           </div>
         ) : (
           <>
             <div className='max-h-[50vh] w-[90%] overflow-y-auto flex flex-col gap-[1vh] ml-auto mr-auto items-center mt-[3vh] mb-[1vh] p-5'>
               {tableOrders.map(order => 
                 order.food_items?.map((item, index) => (
-                  <div key={`${order.id}-${index}`} className='h-fit w-[25vw] bg-white shadow-xl rounded-2xl items-start justify-start flex p-2 relative'>
-                    <div className='size-[11vh] rounded-2xl ml-[.5vw] bg-orange-200 flex items-center justify-center shrink-0'>
-                      <span className='text-2xl'>🍽️</span>
-                    </div>
-                    <div className='flex flex-col ml-[1vw] flex-1 text-left'>
-                      <h1 className='font-sans text-md font-semibold'>{item.name}</h1>
-                      {item.description && (
-                        <h2 className='font-sans text-sm text-neutral-400'>{item.description}</h2>
-                      )}
+                  <div key={`${order.id}-${index}`} className='min-h-fit w-full rounded-2xl items-start justify-start flex relative overflow-hidden bg-[#202020] shadow-md'>
+                    <div className='bg-[#FFD41D] h-full w-[1vw]'></div>
+                    <div className='flex flex-col ml-[1vw] flex-1 text-left py-[1vh]'>
+                      <h1 className='Anybody text-md font-semibold text-white'>{item.name}</h1>
                       {item.options && item.options.length > 0 && (
-                        <div className='text-xs text-neutral-600 mt-1'>
+                        <div className='text-xs text-neutral-400 mt-1'>
                           {item.options.map((opt, idx) => (
                             <div key={idx}>+ {opt.extra_name} (+{opt.price} DA)</div>
                           ))}
                         </div>
                       )}
-                      <h3 className='font-sans text-lg font-bold mt-[1vh]'>
+                      <h3 className='Anybody text-lg font-bold mt-[1vh] text-white'>
                         {item.price * item.quantity + (item.options?.reduce((sum, opt) => sum + opt.price * item.quantity, 0) || 0)} DA
                       </h3>
                     </div>
-                    <div className='flex flex-col items-center justify-center'>
-                      <p className='font-sans text-sm mb-2'>x{item.quantity}</p>
+                    <div className='flex flex-col items-center justify-center gap-[1vh] px-2 py-1'>
+                      <h1 className='text-md Anybody text-white'>x{item.quantity}</h1>
                       <button 
-                        onClick={() => handleRemoveOrderItem(item.order_food_id)}
+                        onClick={() => handleRemoveOrderItem(item.order_food_id, item.id)}
                         className='text-xs bg-red-200 px-2 py-1 rounded cursor-pointer hover:bg-red-300'
                       >
                         Remove
@@ -309,13 +280,14 @@ TOTAL: ${calculateTableTotal()} DA
               )}
             </div>
             
-            <p className='font-sans text-xl font-bold w-full border-t-2 text-start pl-[2vw] pt-[2vh]'>
-              Total: {calculateTableTotal()} DA
-            </p>
+            <div className='flex justify-between border-t-2 items-center mt-[2vh] pt-2 px-[2vw]'>
+              <h1 className='Anybody text-lg font-bold text-black'>Total</h1>
+              <p className='Anybody text-xl font-bold text-black'>{calculateTableTotal()} DA</p>
+            </div>
             
             <button 
               onClick={handlePrintTicket}
-              className="mt-[2vh] inline-block font-sans cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl"
+              className="mt-[2vh] mb-4 inline-block Anybody cursor-pointer items-center justify-center rounded-xl border-[1.58px] border-zinc-600 bg-zinc-950 px-5 py-2 font-medium text-slate-200 shadow-md transition-all duration-300 hover:[transform:translateY(-.335rem)] hover:shadow-xl"
             >
               Print Ticket
             </button>
@@ -324,93 +296,48 @@ TOTAL: ${calculateTableTotal()} DA
       </div>
 
       {/* Sidebar */}
-      <div className='h-[97%] w-[5.5vw] mt-[1vh] bg-white border-1 border-neutral-300 rounded-3xl ml-[1vw] flex flex-col items-center justify-items-center-safe gap-[20vh] mr-auto shadow-xl'>
-        <h1 className='font-serif text-5xl bg-white text-[#dba840] mt-[3vh]'>L</h1>
-        <div className='flex flex-col items-center justify-center gap-[5vh] mt-[7vh]'>
+      <div className='h-screen w-[14vw] flex flex-col items-center justify-start mt-[4vh] mr-auto'>
+        <div className='flex items-center justify-center gap-2'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="white" className="size-7">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" />
+          </svg>
+          <h1 className='Anybody text-lg text-white'>Los Gemelos</h1>
+        </div>
+        <div className='flex flex-col items-center justify-center gap-[2vh] w-full mt-[30vh]'>
           <Link to='/'>
-            <div className='flex flex-col h-[8vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white stroke-[#c4c1c3] hover:stroke-white p-2'>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} className="size-[4vh]">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-              <h1 className='font-sans text-[2vh]'>Acceuil</h1>
-            </div>
-          </Link>
+            <h1 className='Anybody text-start text-[2vh] hover:duration-200 hover:transition-all text-white p-4 px-9 rounded-lg hover:bg-[#2d2d2d]'>Acceuil</h1>
+          </Link> 
           
           <Link to='/order'>
-            <div className='flex flex-col h-[8.5vh] w-[4vw] hover:bg-[#dba840] rounded justify-center items-center hover:transition-colors text-[#c4c1c3] hover:text-white fill-[#c4c1c3] hover:fill-white p-2'>
-              <svg xmlns="http://www.w3.org/2000/svg" className='size-[4vh]' viewBox="0 0 64 64">
-                <g fillRule="evenodd">
-                  <path d="M61.821 11.045c.703-1.309-.891-.912-.891-.912s-10.627 10.201-12.104 8.951S59.231 8.057 57.825 6.23c-1.301-1.703-11.74 10.455-12.994 8.97c-1.242-1.482 8.939-12.123 8.939-12.123s.387-1.602-.912-.9C36.851 10.785 34.812 18.81 34.812 18.81s-.551 1.563.645 2.771c.117.105-29.204 29.26-33.129 33.196c-1.91 1.908 5.098 8.801 6.996 6.893c3.926-3.936 33.024-33.303 33.129-33.194c1.207 1.205 2.766.652 2.766.652s8.012-2.045 16.602-18.083"/>
-                </g>
-              </svg>
-              <h1 className='font-sans text-[2vh]'>Menu</h1>
-            </div>
+            <h1 className='Anybody text-[2vh] hover:duration-200 hover:transition-all text-white p-4 px-9 rounded-lg hover:bg-[#2d2d2d]'>Menu</h1>
           </Link>
           
           <Link to='/tables'>
-            <div className='flex flex-col h-[8vh] w-[4vw] bg-[#dba840] rounded justify-center items-center text-white fill-white p-2'>
-              <svg xmlns="http://www.w3.org/2000/svg" className='size-[4vh]' viewBox="0 0 24 24">
-                <path d="M12 22H6a2 2 0 0 1 2-2V8H2V5h14v3h-6v12a2 2 0 0 1 2 2M22 2v20h-2v-7h-5v7h-2v-8a2 2 0 0 1 2-2h5V2Z"/>
-              </svg>
-              <h1 className='font-sans text-[2.2vh]'>Tables</h1>
-            </div>
+            <h1 className='Anybody text-[2vh] hover:duration-200 hover:transition-all text-white p-4 px-9 rounded-lg hover:bg-[#2d2d2d]'>Tables</h1>
           </Link>
         </div>
       </div>
-    
+
       {/* Main Content */}
-      <div className='h-screen w-[93vw] ml-[.5vw] flex flex-col'>
-        <h1 className='font-sans text-3xl mt-[2vh] ml-[2vw] font-bold'>Tables</h1>
-        
-        <div className='flex mt-[3vh] ml-[3vw] gap-[10vw]'>
-          <div className='items-center grid grid-cols-2'>
-            {tables.slice(0, 8).map((table) => (
-              <div
-                key={table.id}
-                onClick={() => handleTableClick(table)}
-                className={`h-[10vh] w-[10vh] cursor-pointer rounded-full border-2 ${getTableStatus(table.id)} items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform flex flex-col`}
-              >
-                <h1 className='font-sans font-semibold'>{table.name}</h1>
-              </div>
-            ))}
-          </div>
-          
-          <div className='flex flex-col items-center grid grid-cols-2'>
-            {tables.slice(8, 16).map((table) => (
-              <div
-                key={table.id}
-                onClick={() => handleTableClick(table)}
-                className={`h-[10vh] w-[10vh] cursor-pointer rounded-full border-2 ${getTableStatus(table.id)} items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform flex flex-col`}
-              >
-                <h1 className='font-sans font-semibold'>{table.name}</h1>
-              </div>
-            ))}
-          </div>
-          
-          <div className='flex flex-col items-center -mb-[20vh]'>
-            <div className='flex mt-auto'>
-              {tables.slice(16, 20).map((table) => (
-                <div
-                  key={table.id}
-                  onClick={() => handleTableClick(table)}
-                  className={`h-[10vh] w-[10vh] cursor-pointer rounded-full border-2 ${getTableStatus(table.id)} items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform flex flex-col`}
-                >
-                  <h1 className='font-sans font-semibold'>{table.name}</h1>
-                </div>
-              ))}
+      <div className='h-screen w-[92vw] flex flex-col'>
+        <div className='h-[10vh] w-[55vw] ml-[3vw] mt-[4vh] flex items-center justify-between'>
+          <h1 className='Anybody text-2xl text-white font-bold'>Tables</h1>
+        </div>
+
+        <div className='h-[85vh] max-w-[80vw] ml-[3vw] mt-[2vh] overflow-scroll p-4 gap-[2vh] grid grid-cols-6'>
+          {tables.map((table) => (
+            <div
+              key={table.id}
+              onClick={() => handleTableClick(table)}
+              className={`h-[15vh] w-[12vw] ${getTableStatus(table.id)} shadow-xl cursor-pointer rounded-2xl items-center justify-center flex flex-col hover:scale-105 transition-all`}
+            >
+              <h1 className='Anybody font-semibold text-white text-lg'>{table.name}</h1>
+              {orders.some(order => order.table_id === table.id) && (
+                <div className='mt-2 w-3 h-3 bg-white rounded-full'></div>
+              )}
             </div>
-            <div className='flex'>
-              {tables.slice(20, 24).map((table) => (
-                <div
-                  key={table.id}
-                  onClick={() => handleTableClick(table)}
-                  className={`h-[10vh] w-[10vh] cursor-pointer rounded-full border-2 ${getTableStatus(table.id)} items-center justify-center m-[3vh] shadow-lg hover:scale-105 hover:transition-transform flex flex-col`}
-                >
-                  <h1 className='font-sans font-semibold'>{table.name}</h1>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

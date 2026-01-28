@@ -11,7 +11,7 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "package": "npm run build && electron-builder", 
+    "package": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
@@ -34,6 +34,7 @@
     "react-router": "^7.9.1",
     "react-router-dom": "^7.9.1",
     "recharts": "^3.2.1",
+    "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
@@ -53,29 +54,31 @@
     "vite": "^7.0.5"
   },
   "build": {
-  "appId": "com.losgemelos.app",
-  "productName": "Los Gemelos",
-"files": [
-    "out/**/*",
-    "package.json",
-    "app/dist/backend.exe"
-  ],
-  "extraResources": [
-    {
-      "from": "app/dist/backend.exe",
-      "to": "backend.exe"
+    "appId": "com.losgemelos.app",
+    "productName": "Los Gemelos",
+    "files": [
+      "out/**/*",
+      "package.json",
+      "app/dist/backend.exe"
+    ],
+    "extraResources": [
+      {
+        "from": "app/dist/backend.exe",
+        "to": "backend.exe"
+      }
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
-  ],
-  "directories": {
-    "buildResources": "build"
-  },
-  "win": {
-    "target": ["nsis", "portable"]
-  },
-  "nsis": {
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true
   }
 }
-}
-

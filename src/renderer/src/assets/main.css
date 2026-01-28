@@ -11,13 +11,12 @@
 }
 
 @font-face {
-    font-family: 'Quicksand';
-    src: url('Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype'),
-         url('Quicksand/Quicksand-VariableFont_wght.woff2') format('woff2'),
-         url('Quicksand/Quicksand-VariableFont_wght.woff') format('woff');
-    font-weight: 300 700;
+    font-family: 'Anybody';
+    src: url('Anybody/Anybody-Italic-VariableFont_wdth\,wght.ttf') format('truetype'),
+         url('Anybody/Anybody-VariableFont_wdth,wght.ttf') format('woff2');
+
+    font-weight: 100 900;
     font-style: normal;
-    font-display: swap;
 }
 @font-face {
     font-family: 'Imperial';
@@ -25,6 +24,19 @@
     font-weight: 300 700;
     font-style: normal;
     font-display: swap;
+}
+@font-face {
+    font-family: 'Agnes';
+    src: url('Agnes-Regular.ttf') format('truetype');
+    font-weight: 300 700;
+    font-style: normal;
+    font-display: swap;
+}
+.Agnes{
+    font-family: "Agnes", sans-serif;
+}
+.Anybody{
+    font-family: "Anybody", sans-serif;
 }
 .font-Imperial{
     font-family: 'Imperial', cursive;
